@@ -1,4 +1,4 @@
-### 🌟 Volunteer Web App (Pemweblan)
+## 🌟 Volunteer Web App (Pemweblan)
 
 Proyek ini adalah aplikasi web volunteering yang dikembangkan menggunakan Laravel dengan MySQL sebagai basis data.
 Aplikasi ini mempertemukan relawan dengan penyelenggara kegiatan sosial seperti mengajar, bakti sosial, lingkungan, dan aktivitas bermanfaat lainnya.
@@ -18,7 +18,7 @@ Package Manager: Composer & NPM (untuk asset build jika diperlukan)
 7. Ikuti Penyelenggara (relawan bisa follow penyelenggara tertentu)
 8. Manajemen Daftar Kegiatan (relawan bisa membuat list/favorit kegiatan)
 
-⚙️ Instalasi
+### ⚙️ Instalasi
 
 #### 1. Clone repo:
     git clone https://github.com/username/pemweblan-volunteer.git
