@@ -2,28 +2,24 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Review;
+use App\Models\Volunteer;
+use App\Models\ActivityRequest;
 
 class ReviewSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $volunteers = \App\Models\Volunteer::all();
-        $activities = \App\Models\Activity::all();
+        $volunteers = Volunteer::factory(5)->create();
+        $activities = ActivityRequest::factory(5)->create();
 
-        if ($volunteers->count() && $activities->count()) {
-            foreach ($activities as $activity) {
-                $sample = $volunteers->random(min(5, $volunteers->count()));
-                foreach ($sample as $v) {
-                    \App\Models\Review::factory()->create([
-                        'activity_id' => $activity->id,
-                        'volunteer_id' => $v->id,
-                    ]);
-                }
+        foreach ($volunteers as $vol) {
+            foreach ($activities->random(3) as $act) {
+                Review::factory()->create([
+                    'volunteer_id' => $vol->id,
+                    'activity_id' => $act->id,
+                ]);
             }
         }
     }

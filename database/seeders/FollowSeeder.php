@@ -2,26 +2,27 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Follow;
+use App\Models\Organizer;
+use App\Models\Volunteer;
 
 class FollowSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run()
+    public function run(): void
     {
-        $organizers = \App\Models\Organizer::all();
-        $volunteers = \App\Models\Volunteer::all();
+        // Buat beberapa organizer & volunteer dulu
+        $organizers = Organizer::factory(5)->create();
+        $volunteers = Volunteer::factory(5)->create();
 
-        foreach ($volunteers as $v) {
-            $sample = $organizers->random(min(3, $organizers->count()));
-            foreach ($sample as $org) {
-                \App\Models\Follow::firstOrCreate([
+        // Buat beberapa Follow acak
+        foreach ($volunteers as $vol) {
+            // setiap volunteer follow 2 organizer
+            foreach ($organizers->random(2) as $org) {
+                Follow::factory()->create([
                     'organizer_id' => $org->id,
-                    'volunteer_id' => $v->id,
-                ], ['notification' => true]);
+                    'volunteer_id' => $vol->id,
+                ]);
             }
         }
     }

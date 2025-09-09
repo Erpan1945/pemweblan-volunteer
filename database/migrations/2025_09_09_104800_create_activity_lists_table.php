@@ -12,11 +12,17 @@ class CreateActivityListsTable extends Migration
     public function up()
     {
         Schema::create('activity_lists', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('volunteer_id')->constrained('volunteers')->onDelete('cascade');
+            $table->bigIncrements('list_id');
+            $table->unsignedBigInteger('volunteer_id');
             $table->string('name');
             $table->timestamps();
+
+            $table->foreign('volunteer_id')
+                ->references('volunteer_id')
+                ->on('volunteers')
+                ->onDelete('cascade');
         });
+
     }
 
     /**

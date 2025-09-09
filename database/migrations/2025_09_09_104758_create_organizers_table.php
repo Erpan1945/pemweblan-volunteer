@@ -12,7 +12,7 @@ class CreateOrganizersTable extends Migration
     public function up()
     {
         Schema::create('organizers', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('organizer_id');
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
@@ -27,6 +27,7 @@ class CreateOrganizersTable extends Migration
             $table->string('city')->nullable();
             $table->timestamps();
         });
+
     }
 
     /**

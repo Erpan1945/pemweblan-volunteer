@@ -15,7 +15,7 @@ class Organizer extends Model
     ];
 
     public function requests() { 
-        return $this->hasMany(RequestModel::class); 
+        return $this->hasMany(ActivityRequest::class); 
     } 
 
     public function activities() { 

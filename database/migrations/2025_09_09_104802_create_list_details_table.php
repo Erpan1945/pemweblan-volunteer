@@ -12,11 +12,22 @@ class CreateListDetailsTable extends Migration
     public function up()
     {
         Schema::create('list_details', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('list_id')->constrained('activity_lists')->onDelete('cascade');
-            $table->foreignId('activity_id')->constrained('activities')->onDelete('cascade');
+            $table->bigIncrements('list_detail_id');
+            $table->unsignedBigInteger('list_id');
+            $table->unsignedBigInteger('activity_id');
             $table->timestamps();
+
+            $table->foreign('list_id')
+                ->references('list_id')
+                ->on('activity_lists')
+                ->onDelete('cascade');
+
+            $table->foreign('activity_id')
+                ->references('activity_id')
+                ->on('activities')
+                ->onDelete('cascade');
         });
+
     }
 
     /**

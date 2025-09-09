@@ -12,13 +12,24 @@ class CreateReviewsTable extends Migration
     public function up()
     {
         Schema::create('reviews', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('volunteer_id')->constrained('volunteers')->onDelete('cascade');
-            $table->foreignId('activity_id')->constrained('activities')->onDelete('cascade');
-            $table->tinyInteger('rating')->unsigned()->default(5);
+            $table->bigIncrements('review_id');
+            $table->unsignedBigInteger('volunteer_id');
+            $table->unsignedBigInteger('activity_id');
+            $table->tinyInteger('rating');
             $table->text('comment')->nullable();
             $table->timestamps();
+
+            $table->foreign('volunteer_id')
+                ->references('volunteer_id')
+                ->on('volunteers')
+                ->onDelete('cascade');
+
+            $table->foreign('activity_id')
+                ->references('activity_id')
+                ->on('activities')
+                ->onDelete('cascade');
         });
+
     }
 
     /**

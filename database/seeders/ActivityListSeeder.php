@@ -2,19 +2,22 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\ActivityList;
+use App\Models\Volunteer;
 
 class ActivityListSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run()
+    public function run(): void
     {
-        $volunteers = \App\Models\Volunteer::all();
-        foreach ($volunteers as $v) {
-            \App\Models\ActivityList::factory(2)->create(['volunteer_id' => $v->id]);
+        // Buat beberapa volunteer dulu
+        $volunteers = Volunteer::factory(5)->create();
+
+        // Buat 2 ActivityList per volunteer
+        foreach ($volunteers as $vol) {
+            ActivityList::factory(2)->create([
+                'volunteer_id' => $vol->id
+            ]);
         }
     }
 }

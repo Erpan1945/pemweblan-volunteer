@@ -2,27 +2,26 @@
 
 namespace Database\Factories;
 
+use App\Models\Follow;
+use App\Models\Organizer;
+use App\Models\Volunteer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Follow>
- */
 class FollowFactory extends Factory
 {
+    protected $model = Follow::class;
 
-    protected $model = \App\Models\Follow::class;
-
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition()
     {
         return [
-            'organizer_id' => \App\Models\Organizer::factory(),
-            'volunteer_id' => \App\Models\Volunteer::factory(),
-            'notification' => $this->faker->boolean(80),
+            // Pastikan selalu ada organizer_id dan volunteer_id valid
+            'organizer_id' => function() {
+                return Organizer::factory()->create()->id;
+            },
+            'volunteer_id' => function() {
+                return Volunteer::factory()->create()->id;
+            },
+            'notification' => $this->faker->boolean(80), // default 80% true
         ];
     }
 }

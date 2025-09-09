@@ -4,16 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateActivitiesTable extends Migration
+class CreateActivityRequestsTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up()
     {
-        Schema::create('activities', function (Blueprint $table) {
-            $table->bigIncrements('activity_id');
+        Schema::create('requests', function (Blueprint $table) {
+            $table->bigIncrements('request_id');
             $table->unsignedBigInteger('organizer_id');
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->string('title');
             $table->text('description');
             $table->dateTime('registration_start_date');
@@ -37,6 +38,6 @@ class CreateActivitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('activities');
+        Schema::dropIfExists('requests');
     }
 };

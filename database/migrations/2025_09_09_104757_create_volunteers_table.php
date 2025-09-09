@@ -12,16 +12,17 @@ class CreateVolunteersTable extends Migration
     public function up()
     {
         Schema::create('volunteers', function (Blueprint $table) {
-        $table->id('volunteer_id');
-        $table->string('name');
-        $table->string('email')->unique();
-        $table->string('password');
-        $table->enum('gender',['male','female','other'])->nullable();
-        $table->date('birth_date')->nullable();
-        $table->string('province')->nullable();
-        $table->string('city')->nullable();
-        $table->timestamps();
+            $table->bigIncrements('volunteer_id');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->enum('gender', ['male', 'female', 'other'])->nullable();
+            $table->date('birth_date')->nullable();
+            $table->string('province')->nullable();
+            $table->string('city')->nullable();
+            $table->timestamps();
         });
+
     }
 
     /**

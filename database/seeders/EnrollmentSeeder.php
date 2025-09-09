@@ -2,27 +2,26 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Enrollment;
+use App\Models\Volunteer;
+use App\Models\ActivityRequest;
 
 class EnrollmentSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run()
+    public function run(): void
     {
-        $volunteers = \App\Models\Volunteer::all();
-        $activities = \App\Models\Activity::all();
+        // Buat beberapa volunteer dan activity
+        $volunteers = Volunteer::factory(5)->create();
+        $activities = ActivityRequest::factory(5)->create();
 
-        foreach ($activities as $activity) {
-            $sample = $volunteers->random(min(6, $volunteers->count()));
-            foreach ($sample as $v) {
-                \App\Models\Enrollment::firstOrCreate([
-                    'volunteer_id' => $v->id,
-                    'activity_id' => $activity->id,
-                ], [
-                    'status' => 'pending'
+        // Buat enrollments acak
+        foreach ($volunteers as $vol) {
+            foreach ($activities->random(3) as $act) { // tiap volunteer enroll di 3 activity
+                Enrollment::factory()->create([
+                    'volunteer_id' => $vol->id,
+                    'activity_id' => $act->id,
+                    'status' => 'approve', // tulis sebagai string
                 ]);
             }
         }

@@ -2,26 +2,24 @@
 
 namespace Database\Factories;
 
+use App\Models\ListDetail;
+use App\Models\ActivityList;
+use App\Models\ActivityRequest;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ListDetail>
- */
 class ListDetailFactory extends Factory
 {
+    protected $model = ListDetail::class;
 
-    protected $model = \App\Models\ListDetail::class;
-
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition()
     {
         return [
-            'list_id' => \App\Models\ActivityList::factory(),
-            'activity_id' => \App\Models\Activity::factory(),
+            'list_id' => function() {
+                return ActivityList::factory()->create()->id;
+            },
+            'activity_id' => function() {
+                return ActivityRequest::factory()->create()->id;
+            },
         ];
     }
 }

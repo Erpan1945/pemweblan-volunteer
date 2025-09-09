@@ -3,35 +3,28 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Organizer;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Activity>
- */
 class ActivityFactory extends Factory
 {
-    protected $model = \App\Models\Activity::class;
-
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
+        $organizerId = Organizer::query()->inRandomOrder()->value('organizer_id');
 
-        $start = $this->faker->dateTimeBetween('+3 days', '+60 days');
-        $end = (clone $start)->modify('+2 days');
-        
+        if (!$organizerId) {
+            $organizerId = Organizer::factory()->create()->organizer_id;
+        }
+
         return [
-            'organizer_id' => \App\Models\Organizer::factory(),
-            'title' => $this->faker->sentence(4),
-            'description' => $this->faker->paragraph,
-            'registration_start_date' => now()->toDateString(),
-            'registration_end_date' => $this->faker->dateTimeBetween('now', $start)->format('Y-m-d'),
-            'activity_start_date' => $start->format('Y-m-d'),
-            'activity_end_date' => $end->format('Y-m-d'),
-            'location' => $this->faker->address,
-            'thumbnail' => null,
+            'organizer_id'            => $organizerId,
+            'title'                   => $this->faker->sentence(),
+            'description'             => $this->faker->paragraph(),
+            'registration_start_date' => $this->faker->dateTimeBetween('now', '+1 week'),
+            'registration_end_date'   => $this->faker->dateTimeBetween('+1 week', '+2 weeks'),
+            'activity_start_date'     => $this->faker->dateTimeBetween('+2 weeks', '+3 weeks'),
+            'activity_end_date'       => $this->faker->dateTimeBetween('+3 weeks', '+1 month'),
+            'location'                => $this->faker->address(),
+            'thumbnail'               => $this->faker->imageUrl(640, 480, 'event'),
         ];
     }
 }

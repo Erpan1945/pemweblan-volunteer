@@ -2,25 +2,22 @@
 
 namespace Database\Factories;
 
+use App\Models\ActivityList;
+use App\Models\Volunteer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ActivityList>
- */
 class ActivityListFactory extends Factory
 {
-    protected $model = \App\Models\ActivityList::class;
+    protected $model = ActivityList::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition()
     {
         return [
-            'volunteer_id' => \App\Models\Volunteer::factory(),
-            'name' => $this->faker->words(2, true),
+            // Pastikan selalu ada volunteer_id valid
+            'volunteer_id' => function() {
+                return Volunteer::factory()->create()->id;
+            },
+            'name' => $this->faker->sentence(3),
         ];
     }
 }

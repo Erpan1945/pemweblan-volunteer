@@ -12,12 +12,23 @@ class CreateEnrollmentsTable extends Migration
     public function up()
     {
         Schema::create('enrollments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('volunteer_id')->constrained('volunteers')->onDelete('cascade');
-            $table->foreignId('activity_id')->constrained('activities')->onDelete('cascade');
-            $table->enum('status', ['pending','accepted','rejected','cancelled'])->default('pending');
+            $table->bigIncrements('enrollment_id');
+            $table->unsignedBigInteger('volunteer_id');
+            $table->unsignedBigInteger('activity_id');
+            $table->enum('status', ['pending', 'approve', 'reject'])->default('pending');
             $table->timestamps();
+
+            $table->foreign('volunteer_id')
+                ->references('volunteer_id')
+                ->on('volunteers')
+                ->onDelete('cascade');
+
+            $table->foreign('activity_id')
+                ->references('activity_id')
+                ->on('activities')
+                ->onDelete('cascade');
         });
+
     }
 
     /**
