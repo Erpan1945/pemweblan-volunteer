@@ -9,14 +9,14 @@ Database: MySQL
 Package Manager: Composer & NPM (untuk asset build jika diperlukan)
 
 🚀 Fitur Utama
-Registrasi & Login (Relawan, Penyelenggara, Admin)
-Profile (kelola data diri user)
-Permohonan Kegiatan (penyelenggara mengajukan kegiatan baru → diverifikasi admin)
-Publikasi Kegiatan (kegiatan yang disetujui admin ditampilkan ke publik)
-Pendaftaran Kegiatan (relawan bisa daftar / batal)
-Review Kegiatan (rating & komentar dari relawan)
-Ikuti Penyelenggara (relawan bisa follow penyelenggara tertentu)
-Manajemen Daftar Kegiatan (relawan bisa membuat list/favorit kegiatan)
+1. Registrasi & Login (Relawan, Penyelenggara, Admin)
+2. Profile (kelola data diri user)
+3. Permohonan Kegiatan (penyelenggara mengajukan kegiatan baru → diverifikasi admin)
+4. Publikasi Kegiatan (kegiatan yang disetujui admin ditampilkan ke publik)
+5. Pendaftaran Kegiatan (relawan bisa daftar / batal)
+6. Review Kegiatan (rating & komentar dari relawan)
+7. Ikuti Penyelenggara (relawan bisa follow penyelenggara tertentu)
+8. Manajemen Daftar Kegiatan (relawan bisa membuat list/favorit kegiatan)
 
 ⚙️ Instalasi
 
