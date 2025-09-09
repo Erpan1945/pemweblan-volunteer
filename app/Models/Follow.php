@@ -16,7 +16,5 @@ class Follow extends Model
         return $this->belongsTo(Organizer::class); 
     }
 
-    public function volunteer() { 
-        return $this->belongsTo(Volunteer::class); 
-    }
+    public function volunteer() { return $this->belongsTo(Volunteer::class); }
 }

@@ -16,12 +16,12 @@ class ActivityFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
 
         $start = $this->faker->dateTimeBetween('+3 days', '+60 days');
         $end = (clone $start)->modify('+2 days');
-
+        
         return [
             'organizer_id' => \App\Models\Organizer::factory(),
             'title' => $this->faker->sentence(4),
