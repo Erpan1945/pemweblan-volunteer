@@ -1,14 +1,14 @@
-🌟 Volunteer Web App (Pemweblan)
+### 🌟 Volunteer Web App (Pemweblan)
 
 Proyek ini adalah aplikasi web volunteering yang dikembangkan menggunakan Laravel dengan MySQL sebagai basis data.
 Aplikasi ini mempertemukan relawan dengan penyelenggara kegiatan sosial seperti mengajar, bakti sosial, lingkungan, dan aktivitas bermanfaat lainnya.
 
-🔧 Alat Pengembangan
+### 🔧 Alat Pengembangan
 Backend Framework: Laravel 10 (PHP 8+)
 Database: MySQL
 Package Manager: Composer & NPM (untuk asset build jika diperlukan)
 
-🚀 Fitur Utama
+### 🚀 Fitur Utama
 1. Registrasi & Login (Relawan, Penyelenggara, Admin)
 2. Profile (kelola data diri user)
 3. Permohonan Kegiatan (penyelenggara mengajukan kegiatan baru → diverifikasi admin)
@@ -20,30 +20,36 @@ Package Manager: Composer & NPM (untuk asset build jika diperlukan)
 
 ⚙️ Instalasi
 
-1. Clone repo:
+### 1. Clone repo:
     git clone https://github.com/username/pemweblan-volunteer.git
     cd pemweblan-volunteer
 
 
-2. Install dependensi:
+### 2. Install dependensi:
+   ````
     composer install
+   ````
 
+### 4. Buat file .env di root project, lalu isi konfigurasi dasar.
 
-3. Buat file .env di root project, lalu isi konfigurasi dasar.
-
-4. Generate APP_KEY:
+### 5. Generate APP_KEY:
+   ````
     php artisan key:generate
-
-5. Migrasi database & seed data dummy:
+   ````
+### 6. Migrasi database & seed data dummy:
+   ````
     php artisan migrate:fresh --seed
-
-6. Jalankan server Laravel:
+   ````
+### 7. Jalankan server Laravel:
+    ````
     php artisan serve
-    Akses di: http://localhost:8000
+    ````
+Akses di: http://localhost:8000
 
 🌍 Environment Variables
 
 Contoh konfigurasi .env:
+````
 
 APP_NAME=Volunteer
 APP_ENV=local
@@ -64,8 +70,8 @@ SESSION_LIFETIME=120
 CACHE_STORE=database
 QUEUE_CONNECTION=database
 FILESYSTEM_DISK=local
-
-👨‍💻 Kontribusi
+````
+### 👨‍💻 Kontribusi
 Fork atau clone repo ini
 Buat branch baru untuk fitur / bugfix
 Pull request ke branch main
