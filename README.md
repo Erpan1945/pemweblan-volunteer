@@ -46,7 +46,7 @@ Package Manager: Composer & NPM (untuk asset build jika diperlukan)
    ````
 Akses di: http://localhost:8000
 
-🌍 Environment Variables
+### 🌍 Environment Variables
 
 Contoh konfigurasi .env:
 ````
