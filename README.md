@@ -20,17 +20,17 @@ Package Manager: Composer & NPM (untuk asset build jika diperlukan)
 
 ⚙️ Instalasi
 
-### 1. Clone repo:
+#### 1. Clone repo:
     git clone https://github.com/username/pemweblan-volunteer.git
     cd pemweblan-volunteer
 
 
-### 2. Install dependensi:
+#### 2. Install dependensi:
    ````
     composer install
    ````
 
-### 4. Buat file .env di root project, lalu isi konfigurasi dasar.
+#### 4. Buat file .env, lalu isi konfigurasi dasar.
 ````
 APP_NAME=Volunteer
 APP_ENV=local
@@ -53,21 +53,21 @@ QUEUE_CONNECTION=database
 FILESYSTEM_DISK=local
 ````
 
-### 5. Generate APP_KEY:
+#### 5. Generate APP_KEY:
    ````
     php artisan key:generate
    ````
-### 6. Migrasi database & seed data dummy:
+#### 6. Migrasi database & seed data dummy:
    ````
     php artisan migrate:fresh --seed
    ````
-### 7. Jalankan server Laravel:
+#### 7. Jalankan server Laravel:
    ````
     php artisan serve
    ````
 Akses di: http://localhost:8000
 
-### 👨‍💻 Kontribusi
+#### 👨‍💻 Kontribusi
 Fork atau clone repo ini
 Buat branch baru untuk fitur / bugfix
 Pull request ke branch main
