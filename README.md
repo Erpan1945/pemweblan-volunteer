@@ -41,9 +41,9 @@ Package Manager: Composer & NPM (untuk asset build jika diperlukan)
     php artisan migrate:fresh --seed
    ````
 ### 7. Jalankan server Laravel:
-    ````
+   ````
     php artisan serve
-    ````
+   ````
 Akses di: http://localhost:8000
 
 🌍 Environment Variables
