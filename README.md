@@ -31,26 +31,7 @@ Package Manager: Composer & NPM (untuk asset build jika diperlukan)
    ````
 
 ### 4. Buat file .env di root project, lalu isi konfigurasi dasar.
-
-### 5. Generate APP_KEY:
-   ````
-    php artisan key:generate
-   ````
-### 6. Migrasi database & seed data dummy:
-   ````
-    php artisan migrate:fresh --seed
-   ````
-### 7. Jalankan server Laravel:
-   ````
-    php artisan serve
-   ````
-Akses di: http://localhost:8000
-
-### 🌍 Environment Variables
-
-Contoh konfigurasi .env:
 ````
-
 APP_NAME=Volunteer
 APP_ENV=local
 APP_KEY=base64:KirYqBOlYVjWmgc7FM/PWONpZ7mCebQrSEvsNk2NXMQ=
@@ -71,6 +52,21 @@ CACHE_STORE=database
 QUEUE_CONNECTION=database
 FILESYSTEM_DISK=local
 ````
+
+### 5. Generate APP_KEY:
+   ````
+    php artisan key:generate
+   ````
+### 6. Migrasi database & seed data dummy:
+   ````
+    php artisan migrate:fresh --seed
+   ````
+### 7. Jalankan server Laravel:
+   ````
+    php artisan serve
+   ````
+Akses di: http://localhost:8000
+
 ### 👨‍💻 Kontribusi
 Fork atau clone repo ini
 Buat branch baru untuk fitur / bugfix
