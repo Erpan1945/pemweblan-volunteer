@@ -4,9 +4,9 @@ Proyek ini adalah aplikasi web volunteering yang dikembangkan menggunakan Larave
 Aplikasi ini mempertemukan relawan dengan penyelenggara kegiatan sosial seperti mengajar, bakti sosial, lingkungan, dan aktivitas bermanfaat lainnya.
 
 ### 🔧 Alat Pengembangan
-Backend Framework: Laravel 10 (PHP 8+)
-Database: MySQL
-Package Manager: Composer & NPM (untuk asset build jika diperlukan)
+1. Backend Framework : Laravel 10 (PHP 8+)
+2. Database : MySQL
+3. Package Manager : Composer & NPM (untuk asset build jika diperlukan)
 
 ### 🚀 Fitur Utama
 1. Registrasi & Login (Relawan, Penyelenggara, Admin)
