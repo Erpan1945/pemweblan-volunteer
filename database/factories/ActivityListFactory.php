@@ -1,0 +1,26 @@
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ActivityList>
+ */
+class ActivityListFactory extends Factory
+{
+    protected $model = \App\Models\ActivityList::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition()
+    {
+        return [
+            'volunteer_id' => \App\Models\Volunteer::factory(),
+            'name' => $this->faker->words(2, true),
+        ];
+    }
+}
