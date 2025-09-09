@@ -44,9 +44,9 @@ APP_URL=http://localhost
    ````
     php artisan key:generate
    ````
-#### 6. Migrasi database & seed data dummy:
+#### 6. Migrasi database:
    ````
-    php artisan migrate:fresh --seed
+    php artisan migrate
    ````
 #### 7. Jalankan server Laravel:
    ````
