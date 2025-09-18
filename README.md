@@ -34,32 +34,19 @@ Aplikasi ini mempertemukan relawan dengan penyelenggara kegiatan sosial seperti 
 ````
 APP_NAME=Volunteer
 APP_ENV=local
-APP_KEY=base64:KirYqBOlYVjWmgc7FM/PWONpZ7mCebQrSEvsNk2NXMQ=
+APP_KEY=...
 APP_DEBUG=true
 APP_URL=http://localhost
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=web_volunteer
-DB_USERNAME=root
-DB_PASSWORD=
-
-SESSION_DRIVER=database
-SESSION_LIFETIME=120
-
-CACHE_STORE=database
-QUEUE_CONNECTION=database
-FILESYSTEM_DISK=local
 ````
 
 #### 5. Generate APP_KEY:
    ````
     php artisan key:generate
    ````
-#### 6. Migrasi database & seed data dummy:
+#### 6. Migrasi database:
    ````
-    php artisan migrate:fresh --seed
+    php artisan migrate
    ````
 #### 7. Jalankan server Laravel:
    ````
