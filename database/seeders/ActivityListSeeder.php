@@ -8,16 +8,15 @@ use App\Models\Volunteer;
 
 class ActivityListSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
-        // Buat beberapa volunteer dulu
-        $volunteers = Volunteer::factory(5)->create();
+        // Buat volunteer dulu
+        $volunteer = Volunteer::factory()->create();
 
-        // Buat 2 ActivityList per volunteer
-        foreach ($volunteers as $vol) {
-            ActivityList::factory(2)->create([
-                'volunteer_id' => $vol->id
-            ]);
-        }
+        // Isi activity list dengan volunteer_id yang valid
+        ActivityList::factory(10)->create([
+            'volunteer_id' => Volunteer::factory(),
+        ]);
+
     }
 }

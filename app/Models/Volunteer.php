@@ -10,6 +10,10 @@ class Volunteer extends Model
     /** @use HasFactory<\Database\Factories\VolunteerFactory> */
     use HasFactory;
 
+    protected $primaryKey = 'volunteer_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
     protected $fillable = [
         'name','email','password','gender','birth_date','province','city'
     ];
@@ -27,7 +31,7 @@ class Volunteer extends Model
         return $this->hasMany(Review::class); 
     }
 
-    public function lists() { 
+    public function activityLists() { 
         return $this->hasMany(ActivityList::class); 
     }
 

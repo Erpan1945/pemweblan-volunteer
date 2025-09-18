@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Organizer;
 
 class OrganizerSeeder extends Seeder
 {
@@ -12,6 +13,6 @@ class OrganizerSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Organizer::factory(8)->create();
+        Organizer::factory(10)->create(); // bikin 10 organizer dulu
     }
 }

@@ -10,13 +10,19 @@ class Activity extends Model
     /** @use HasFactory<\Database\Factories\ActivityFactory> */
     use HasFactory;
 
+    protected $primaryKey = 'activity_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+    
     protected $fillable = [
         'organizer_id','title','description','registration_start_date','registration_end_date','activity_start_date','activity_end_date','location','thumbnail'
     ];
 
-    public function organizer() { 
-        return $this->belongsTo(Organizer::class); 
+    // app/Models/Activity.php
+    public function organizer() {
+        return $this->belongsTo(Organizer::class, 'organizer_id');
     }
+
 
     public function enrollments() { 
         return $this->hasMany(Enrollment::class); 

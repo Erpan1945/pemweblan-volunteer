@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Enrollment;
 use App\Models\Volunteer;
-use App\Models\ActivityRequest;
+use App\Models\Activity;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EnrollmentFactory extends Factory
@@ -15,12 +15,11 @@ class EnrollmentFactory extends Factory
     {
         return [
             'volunteer_id' => function () {
-                return Volunteer::factory()->create()->id;
+                return Volunteer::factory()->create()->volunteer_id; // PK sesuai migration
             },
             'activity_id' => function () {
-                return ActivityRequest::factory()->create()->id;
+                return Activity::factory()->create()->activity_id; // harus ke Activity, bukan ActivityRequest
             },
-            // Pastikan sesuai ENUM
             'status' => $this->faker->randomElement(['pending', 'approve', 'reject']),
         ];
     }

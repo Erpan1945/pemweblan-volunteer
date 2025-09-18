@@ -10,6 +10,10 @@ class Organizer extends Model
     /** @use HasFactory<\Database\Factories\OrganizerFactory> */
     use HasFactory;
 
+    protected $primaryKey = 'organizer_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
     protected $fillable = [
         'name','email','phone_number','password','date_of_establishment','description','logo','website','instagram','tiktok','province','city'
     ];

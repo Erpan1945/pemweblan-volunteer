@@ -10,21 +10,20 @@ class ActivityRequestFactory extends Factory
 {
     protected $model = ActivityRequest::class;
 
-    public function definition()
+    public function definition(): array
     {
         return [
-            'organizer_id' => function() {
-                return Organizer::factory()->create()->id; // pastikan selalu ada
-            },
+            'organizer_id' => Organizer::factory(),
             'status' => $this->faker->randomElement(['pending', 'approved', 'rejected']),
-            'title' => $this->faker->sentence(),
-            'description' => $this->faker->paragraph(),
-            'registration_start_date' => $this->faker->dateTimeBetween('now', '+1 week'),
-            'registration_end_date' => $this->faker->dateTimeBetween('+1 week', '+2 week'),
-            'activity_start_date' => $this->faker->dateTimeBetween('+2 week', '+3 week'),
-            'activity_end_date' => $this->faker->dateTimeBetween('+3 week', '+4 week'),
-            'location' => $this->faker->address(),
-            'thumbnail' => $this->faker->imageUrl(640, 480),
+            'title' => $this->faker->sentence,
+            'description' => $this->faker->paragraph,
+            'registration_start_date' => $this->faker->dateTimeBetween('+1 days', '+5 days'),
+            'registration_end_date' => $this->faker->dateTimeBetween('+6 days', '+10 days'),
+            'activity_start_date' => $this->faker->dateTimeBetween('+11 days', '+15 days'),
+            'activity_end_date' => $this->faker->dateTimeBetween('+16 days', '+20 days'),
+            'location' => $this->faker->address,
+            'thumbnail' => $this->faker->imageUrl(640, 480, 'event', true),
         ];
     }
-}
+
+}   

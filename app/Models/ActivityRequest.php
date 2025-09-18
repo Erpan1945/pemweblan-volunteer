@@ -9,7 +9,10 @@ class ActivityRequest extends Model
 {
     use HasFactory;
 
-    protected $table = 'requests'; // jika tabel tetap bernama 'requests'
+    protected $table = 'activity_requests';
+    protected $primaryKey = 'request_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
         'organizer_id',
@@ -29,4 +32,5 @@ class ActivityRequest extends Model
     {
         return $this->belongsTo(Organizer::class);
     }
+
 }

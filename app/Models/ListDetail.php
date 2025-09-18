@@ -12,8 +12,8 @@ class ListDetail extends Model
 
     protected $fillable = ['list_id','activity_id'];
 
-    public function list() { 
-        return $this->belongsTo(ActivityList::class, 'list_id'); 
+    public function activityList() {
+        return $this->belongsTo(ActivityList::class, 'list_id');
     }
 
     public function activity() { 

@@ -11,7 +11,7 @@ class CreateActivityRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('requests', function (Blueprint $table) {
+        Schema::create('activity_requests', function (Blueprint $table) {
             $table->bigIncrements('request_id');
             $table->unsignedBigInteger('organizer_id');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
@@ -25,10 +25,8 @@ class CreateActivityRequestsTable extends Migration
             $table->string('thumbnail')->nullable();
             $table->timestamps();
 
-            $table->foreign('organizer_id')
-                ->references('organizer_id')
-                ->on('organizers')
-                ->onDelete('cascade');
+            $table->foreign('organizer_id')->references('organizer_id')->on('organizers');
+
         });
 
     }

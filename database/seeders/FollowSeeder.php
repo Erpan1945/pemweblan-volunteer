@@ -11,19 +11,26 @@ class FollowSeeder extends Seeder
 {
     public function run(): void
     {
-        // Buat beberapa organizer & volunteer dulu
-        $organizers = Organizer::factory(5)->create();
-        $volunteers = Volunteer::factory(5)->create();
+        // Pastikan ada organizer & volunteer
+        $organizers = Organizer::all();
+        if ($organizers->count() === 0) {
+            $organizers = Organizer::factory(5)->create();
+        }
 
-        // Buat beberapa Follow acak
+        $volunteers = Volunteer::all();
+        if ($volunteers->count() === 0) {
+            $volunteers = Volunteer::factory(5)->create();
+        }
+
+        // Buat follow
         foreach ($volunteers as $vol) {
-            // setiap volunteer follow 2 organizer
-            foreach ($organizers->random(2) as $org) {
-                Follow::factory()->create([
-                    'organizer_id' => $org->id,
-                    'volunteer_id' => $vol->id,
-                ]);
-            }
+            $randomOrg = $organizers->random();
+
+            Follow::create([
+                'organizer_id' => $randomOrg->organizer_id,
+                'volunteer_id' => $vol->volunteer_id,
+                'notification' => true,
+            ]);
         }
     }
 }

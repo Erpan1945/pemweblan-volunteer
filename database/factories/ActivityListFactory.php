@@ -13,11 +13,8 @@ class ActivityListFactory extends Factory
     public function definition()
     {
         return [
-            // Pastikan selalu ada volunteer_id valid
-            'volunteer_id' => function() {
-                return Volunteer::factory()->create()->id;
-            },
-            'name' => $this->faker->sentence(3),
+            'volunteer_id' => Volunteer::inRandomOrder()->first()->volunteer_id ?? Volunteer::factory()->create()->volunteer_id,
+            'name' => $this->faker->words(3, true),
         ];
     }
 }
