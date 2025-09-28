@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\OrganizerController;
 use App\Http\Controllers\Api\VolunteerController;
+use App\Http\Controllers\Api\FollowingController;
 
 // Route::get('activities', [ActivityController::class, 'index']);
 // Route::get('activities/{id}', [ActivityController::class, 'show']);
@@ -49,6 +50,13 @@ Route::prefix('profiles')->group(function () {
     Route::patch('/{id}', [ProfileController::class, 'update']); 
     Route::delete('/{id}', [ProfileController::class, 'destroy']); 
 });
+
+Route::get('/following', [FollowingController::class, 'index']); 
+Route::get('/follower/{organizer}', [FollowingController::class, 'showFollower']); //menampilkan detail pengikut suatu penyelenggara
+Route::get('/following/{volunteer}', [FollowingController::class, 'show']); //menampilkan detail penyelenggara yang diikuti oleh volunteer
+Route::post('/following', [FollowingController::class, 'store']); //memfollow penyelenggara
+Route::patch('/following/{organizer}/notifications', [FollowingController::class, 'update']); //update notifikasi
+Route::delete('/following/{organizer}', [FollowingController::class, 'destroy']); //batal follow
 
 // --- USER (umum)
 Route::get('/users', [UserController::class, 'index']);
