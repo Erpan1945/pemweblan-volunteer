@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
             ActivitySeeder::class,
             ActivityRequestSeeder::class,
             ActivityListSeeder::class,
-            FollowSeeder::class,
             EnrollmentSeeder::class,
             ReviewSeeder::class,
             ListDetailSeeder::class,

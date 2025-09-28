@@ -26,7 +26,13 @@ class Organizer extends Model
         return $this->hasMany(Activity::class); 
     }
 
-    public function followers() { 
-        return $this->hasMany(Follow::class); 
-    }
+    public function volunteers()
+    {
+        return $this->belongsToMany(Volunteer::class, 'following',
+            'organizer_id', 'volunteer_id')
+            ->withTimestamps()
+            ->withPivot(['notification']);
+    } 
+
+
 }
