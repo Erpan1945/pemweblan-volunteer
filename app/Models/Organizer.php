@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Organizer extends Model
+class Organizer extends Model implements JWTSubject
 {
     use HasFactory;
 
@@ -32,6 +33,27 @@ class Organizer extends Model
     public function activities() { 
         return $this->hasMany(Activity::class, 'organizer_id', 'organizer_id'); 
     }
+<<<<<<< Updated upstream
+=======
+
+    public function volunteers()
+    {
+        return $this->belongsToMany(Volunteer::class, 'following',
+            'organizer_id', 'volunteer_id')
+            ->withTimestamps()
+            ->withPivot(['notification']);
+    } 
+    
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+>>>>>>> Stashed changes
 }
 
 

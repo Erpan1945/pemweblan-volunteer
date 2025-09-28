@@ -40,9 +40,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
         'api' => [
             'driver' => 'jwt',
             'provider' => 'users',
+
+        ],
+
+        'api' => [
+        'driver' => 'jwt',
+        'provider' => 'volunteers', 
         ],
     ],
 
@@ -64,9 +71,14 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'volunteers' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\Volunteer::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
         ],
 
         // 'users' => [

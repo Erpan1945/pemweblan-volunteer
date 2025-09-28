@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Volunteer extends Model
+class Volunteer extends Model implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\VolunteerFactory> */
     use HasFactory;
@@ -42,4 +43,13 @@ class Volunteer extends Model
             ->withPivot(['notification']);
     }
 
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }
