@@ -33,8 +33,6 @@ class Organizer extends Model implements JWTSubject
     public function activities() { 
         return $this->hasMany(Activity::class, 'organizer_id', 'organizer_id'); 
     }
-<<<<<<< Updated upstream
-=======
 
     public function volunteers()
     {
@@ -53,7 +51,6 @@ class Organizer extends Model implements JWTSubject
     {
         return [];
     }
->>>>>>> Stashed changes
 }
 
 
