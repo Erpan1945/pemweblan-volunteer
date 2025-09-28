@@ -1,95 +1,94 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Activity;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
-use Illuminate\Http\Request;
 use App\Http\Resources\ActivityResource;
+use App\Models\Activity;
+use Illuminate\Http\Request;
 
 class ActivityController extends Controller
 {
-    // GET /api/activities
-    // GET /api/activities
     public function index()
     {
-        $activities = Activity::with('organizer')->get();
-
-        $result = $activities->map(function ($activity) {
-            return [
-                'activity_id'              => $activity->activity_id,
-                'title'                    => $activity->title,
-                'description'              => $activity->description,
-                'registration_start_date'  => $activity->registration_start_date,
-                'registration_end_date'    => $activity->registration_end_date,
-                'activity_start_date'      => $activity->activity_start_date,
-                'activity_end_date'        => $activity->activity_end_date,
-                'location'                 => $activity->location,
-                'thumbnail'                => $activity->thumbnail,
-                'organizer'                => $activity->organizer ? $activity->organizer->name : null,
-                'created_at'               => $activity->created_at,
-                'updated_at'               => $activity->updated_at,
-            ];
-        });
-
-        return response()->json($result, 200);
+        $activities = Activity::with('organizer')->where('status', 'dipublikasikan')->get();
+        return ActivityResource::collection($activities);
     }
 
-    // GET /api/activities/{id}
-    public function show($id)
-    {
-        $activity = Activity::with('organizer')->find($id);
-
-        if (! $activity) {
-            return response()->json(['message' => 'Activity not found'], 404);
-        }
-
-        $result = [
-            'activity_id'              => $activity->activity_id,
-            'title'                    => $activity->title,
-            'description'              => $activity->description,
-            'registration_start_date'  => $activity->registration_start_date,
-            'registration_end_date'    => $activity->registration_end_date,
-            'activity_start_date'      => $activity->activity_start_date,
-            'activity_end_date'        => $activity->activity_end_date,
-            'location'                 => $activity->location,
-            'thumbnail'                => $activity->thumbnail,
-            'organizer'                => $activity->organizer ? $activity->organizer->name : null,
-            'created_at'               => $activity->created_at,
-            'updated_at'               => $activity->updated_at,
-        ];
-
-        return response()->json($result, 200);
-    }
-
-
-    // POST /api/activities
     public function store(StoreActivityRequest $request)
     {
-        $activity = Activity::create($request->validated());
-        return response()->json($activity, 201);
+        $data = array_merge($request->validated(), ['status' => 'menunggu verifikasi admin']);
+        $activity = Activity::create($data);
+        return new ActivityResource($activity->load('organizer'));
     }
 
-    // PUT/PATCH /api/activities/{id}
-    public function update(UpdateActivityRequest $request, $id)
+    public function show(Activity $activity)
     {
-        $activity = Activity::find($id);
-        if (! $activity) {
-            return response()->json(['message' => 'Activity not found'], 404);
-        }
+        return new ActivityResource($activity->load('organizer'));
+    }
+
+   public function mine(Request $request)
+    {
+        // 1. Validasi dulu bahwa organizer_id ada di request dan valid
+        $validated = $request->validate([
+            'organizer_id' => 'required|integer|exists:organizers,organizer_id'
+        ]);
+
+        // 2. Ambil organizer_id dari hasil validasi
+        $organizerId = $validated['organizer_id'];
+        
+        // 3. Eager load relasi 'organizer' untuk mengambil namanya nanti
+        $activities = Activity::with('organizer')
+            ->where('organizer_id', $organizerId)
+            ->get();
+
+        // 4. Kembalikan hasilnya menggunakan resource
+        return ActivityResource::collection($activities);
+    }
+
+    public function update(UpdateActivityRequest $request, Activity $activity)
+    {
         $activity->update($request->validated());
-        return response()->json($activity, 200);
+        return new ActivityResource($activity->load('organizer'));
     }
 
-    // DELETE /api/activities/{id}
-    public function destroy($id)
+    public function schedule(Request $request, Activity $activity)
     {
-        $activity = Activity::find($id);
-        if (! $activity) {
-            return response()->json(['message' => 'Activity not found'], 404);
+        if ($activity->status !== 'dipublikasikan') {
+            return response()->json(['message' => 'Hanya jadwal kegiatan yang sudah dipublikasikan yang dapat diubah.'], 403);
+        }
+        $validated = $request->validate([
+            'activity_start_date' => 'required|date',
+            'activity_end_date' => 'required|date|after_or_equal:activity_start_date',
+        ]);
+        $activity->update($validated);
+        return new ActivityResource($activity->load('organizer'));
+    }
+
+    public function destroy(Activity $activity)
+    {
+        if ($activity->status !== 'menunggu verifikasi admin') {
+            return response()->json(['message' => 'Hanya kegiatan yang belum diverifikasi yang dapat dihapus.'], 403);
         }
         $activity->delete();
-        return response()->json(['message' => 'Activity deleted'], 200);
+        return response()->json(['message' => 'Kegiatan berhasil dihapus.'], 200);
+    }
+
+    public function approve(Activity $activity)
+    {
+        $activity->update(['status' => 'dipublikasikan']);
+        return new ActivityResource($activity->load('organizer'));
+    }
+
+    public function reject(Request $request, Activity $activity)
+    {
+        $validated = $request->validate(['rejection_reason' => 'required|string|min:10']);
+        $activity->update([
+            'status' => 'ditolak',
+            'rejection_reason' => $validated['rejection_reason'],
+        ]);
+        return new ActivityResource($activity->load('organizer'));
     }
 }

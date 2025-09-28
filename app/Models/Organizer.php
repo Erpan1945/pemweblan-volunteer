@@ -7,32 +7,31 @@ use Illuminate\Database\Eloquent\Model;
 
 class Organizer extends Model
 {
-    /** @use HasFactory<\Database\Factories\OrganizerFactory> */
     use HasFactory;
 
-    protected $primaryKey = 'organizer_id';
-    public $incrementing = true;
-    protected $keyType = 'int';
+    /**
+     * Nama primary key untuk model ini.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'organizer_id'; // <-- INI PERBAIKAN UTAMA
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'name','email','phone_number','password','date_of_establishment','description','logo','website','instagram','tiktok','province','city'
+        'name', 'email', 'phone_number', 'password', 'date_of_establishment', 
+        'description', 'logo', 'website', 'instagram', 'tiktok', 'province', 'city'
     ];
 
-    public function requests() { 
-        return $this->hasMany(ActivityRequest::class); 
-    } 
-
+    /**
+     * Mendefinisikan relasi ke Activity.
+     */
     public function activities() { 
-        return $this->hasMany(Activity::class); 
+        return $this->hasMany(Activity::class, 'organizer_id', 'organizer_id'); 
     }
-
-    public function volunteers()
-    {
-        return $this->belongsToMany(Volunteer::class, 'following',
-            'organizer_id', 'volunteer_id')
-            ->withTimestamps()
-            ->withPivot(['notification']);
-    } 
-
-
 }
+
+

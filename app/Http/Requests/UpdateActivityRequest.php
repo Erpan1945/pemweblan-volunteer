@@ -6,23 +6,16 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateActivityRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return false;
+        $activity = $this->route('activity');
+        // --- UBAH 'pending' MENJADI 'menunggu verifikasi admin' ---
+        return $activity->status === 'menunggu verifikasi admin';
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'organizer_id' => 'sometimes|required|integer|exists:organizers,id',
             'title' => 'sometimes|required|string|min:3|max:255',
             'description' => 'sometimes|required|string|min:10',
             'registration_start_date' => 'sometimes|required|date',
@@ -30,9 +23,7 @@ class UpdateActivityRequest extends FormRequest
             'activity_start_date' => 'sometimes|required|date',
             'activity_end_date' => 'sometimes|required|date|after_or_equal:activity_start_date',
             'location' => 'sometimes|required|string|min:3|max:255',
-            'thumbnail' => 'sometimes|nullable|url',
-            'status' => 'sometimes|in:pending,approved,rejected',
+            'thumbnail' => 'nullable|url',
         ];
     }
-
 }

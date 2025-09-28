@@ -8,7 +8,7 @@ class StoreActivityRequest extends FormRequest
     public function rules()
     {
         return [
-            'organizer_id' => 'required|integer|exists:organizers,id',
+           'organizer_id' => 'required|integer|exists:organizers,organizer_id', 
             'title' => 'required|string|min:3|max:255',
             'description' => 'required|string|min:10',
             'registration_start_date' => 'required|date',
