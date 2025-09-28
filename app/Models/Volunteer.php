@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Tymon\JWTAuth\Conntracts\JWTSubject;
 
-class Volunteer extends Authecticable implements JWTSubject
+class Volunteer extends Model
 {
     /** @use HasFactory<\Database\Factories\VolunteerFactory> */
     use HasFactory;
@@ -18,15 +17,6 @@ class Volunteer extends Authecticable implements JWTSubject
     protected $fillable = [
         'name','email','password','gender','birth_date','province','city'
     ];
-
-    //JWTSubject methods
-    public function getJWTIdentifier(){
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims(){
-        return[];
-    }
 
     // relasi
     public function enrollments() { 

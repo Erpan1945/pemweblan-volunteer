@@ -44,14 +44,6 @@ return [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
-        'volunteer' => [
-            'driver' => 'jwt',
-            'provider' => 'volunteers'
-        ],
-        'organizer' => [
-            'driver' => 'jwt',
-            'provider' => 'organizers'
-        ]
     ],
 
     /*
@@ -76,14 +68,6 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-        'volunteers' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\Volunteer::class)
-        ],
-        'organizers' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\Organizer::class)
-        ]
 
         // 'users' => [
         //     'driver' => 'database',
