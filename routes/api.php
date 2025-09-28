@@ -63,16 +63,6 @@ Route::apiResource('volunteers', VolunteerController::class);
 
 Route::get('/user', [UserController::class, 'show']);
 
-Route::prefix('activity_request')->group(function () {
-    Route::post('/', [ActivityRequestController::class, 'store']);
-    Route::get('/', [ActivityRequestController::class, 'index']);
-    Route::get('/mine', [ActivityRequestController::class, 'mine']);
-    Route::get('/{id}', [ActivityRequestController::class, 'show']);
-    Route::put('/{id}', [ActivityRequestController::class, 'update']);
-    Route::delete('/{id}', [ActivityRequestController::class, 'destroy']);
-    Route::patch('/{id}/approve', [ActivityRequestController::class, 'approve']);
-    Route::patch('/{id}/reject', [ActivityRequestController::class, 'reject']);
-});
 
 Route::get('/following', [FollowingController::class, 'index']); 
 Route::get('/follower/{organizer}', [FollowingController::class, 'showFollower']); //menampilkan detail pengikut suatu penyelenggara
@@ -80,6 +70,17 @@ Route::get('/following/{volunteer}', [FollowingController::class, 'show']); //me
 Route::post('/following', [FollowingController::class, 'store']); //memfollow penyelenggara
 Route::patch('/following/{organizer}/notifications', [FollowingController::class, 'update']); //update notifikasi
 Route::delete('/following/{organizer}', [FollowingController::class, 'destroy']); //batal follow
+
+// Route::prefix('activity_request')->group(function () {
+//     Route::post('/', [ActivityRequestController::class, 'store']);
+//     Route::get('/', [ActivityRequestController::class, 'index']);
+//     Route::get('/mine', [ActivityRequestController::class, 'mine']);
+//     Route::get('/{id}', [ActivityRequestController::class, 'show']);
+//     Route::put('/{id}', [ActivityRequestController::class, 'update']);
+//     Route::delete('/{id}', [ActivityRequestController::class, 'destroy']);
+//     Route::patch('/{id}/approve', [ActivityRequestController::class, 'approve']);
+//     Route::patch('/{id}/reject', [ActivityRequestController::class, 'reject']);
+// });
 
 // // --- USER (umum)
 // Route::get('/users', [UserController::class, 'index']);
