@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Tymon\JWTAuth\Conntracts\JWTSubject;
 
-class Organizer extends Model
+class Organizer extends Authecticable implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\OrganizerFactory> */
     use HasFactory;
@@ -17,6 +18,15 @@ class Organizer extends Model
     protected $fillable = [
         'name','email','phone_number','password','date_of_establishment','description','logo','website','instagram','tiktok','province','city'
     ];
+
+        //JWTSubject methods
+    public function getJWTIdentifier(){
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims(){
+        return[];
+    }
 
     public function requests() { 
         return $this->hasMany(ActivityRequest::class); 
