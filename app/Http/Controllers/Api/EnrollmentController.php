@@ -12,9 +12,6 @@ use Illuminate\Support\Facades\Validator;
 
 class EnrollmentController extends Controller
 {
-    /**
-     * GET /api/enrollments
-     */
     public function index(Request $request)
     {
         $user = $request->user();
@@ -42,15 +39,11 @@ class EnrollmentController extends Controller
         return response()->json(['message' => 'Unauthorized'], 401);
     }
 
-    /**
-     * GET /api/enrollments/{enrollment}
-     */
     public function show(Request $request, Enrollment $enrollment)
     {
         $user = $request->user();
 
         if ($user instanceof \App\Models\Admin) {
-            // allowed
         } elseif ($user instanceof Organizer) {
             if ($enrollment->activity->organizer_id !== $user->organizer_id) {
                 return response()->json(['message' => 'Forbidden'], 403);
@@ -69,20 +62,16 @@ class EnrollmentController extends Controller
         ], 200);
     }
 
-    /**
-     * POST /api/enrollments
-     */
     public function store(Request $request)
     {
         $user = $request->user();
 
-        if (! ($user instanceof Volunteer)) {
+        if (!($user instanceof Volunteer)) {
             return response()->json(['message' => 'Only volunteers can enroll'], 403);
         }
 
         $validator = Validator::make($request->all(), [
             'activity_id' => 'required|integer|exists:activities,id',
-            'notes' => 'nullable|string|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -119,43 +108,24 @@ class EnrollmentController extends Controller
             'activity_id' => $activity->id,
             'volunteer_id' => $user->volunteer_id,
             'status' => 'pending',
-            'notes' => $request->notes ?? null,
         ]);
 
         return response()->json(['message' => 'Pendaftaran berhasil', 'data' => $enrollment], 201);
     }
 
-    /**
-     * PUT/PATCH /api/enrollments/{enrollment}
-     */
     public function update(Request $request, Enrollment $enrollment)
     {
         $user = $request->user();
 
-        if ($user instanceof Volunteer) {
-            if ($enrollment->volunteer_id !== $user->volunteer_id) {
-                return response()->json(['message' => 'Forbidden'], 403);
-            }
-        } elseif (! ($user instanceof \App\Models\Admin)) {
+        if ($user instanceof Volunteer && $enrollment->volunteer_id !== $user->volunteer_id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        } elseif (!($user instanceof \App\Models\Admin)) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        $validator = Validator::make($request->all(), [
-            'notes' => 'nullable|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $enrollment->update($request->only(['notes']));
-
-        return response()->json(['message' => 'Enrollment updated', 'data' => $enrollment], 200);
+        return response()->json(['message' => 'Tidak ada kolom lain untuk diupdate'], 200);
     }
 
-    /**
-     * PATCH /api/enrollments/{enrollment}/status
-     */
     public function updateStatus(Request $request, Enrollment $enrollment)
     {
         $validator = Validator::make($request->all(), [
@@ -168,11 +138,9 @@ class EnrollmentController extends Controller
 
         $user = $request->user();
 
-        if ($user instanceof Organizer) {
-            if ($enrollment->activity->organizer_id !== $user->organizer_id) {
-                return response()->json(['message' => 'Forbidden'], 403);
-            }
-        } elseif (! ($user instanceof \App\Models\Admin)) {
+        if ($user instanceof Organizer && $enrollment->activity->organizer_id !== $user->organizer_id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        } elseif (!($user instanceof \App\Models\Admin)) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
@@ -191,18 +159,13 @@ class EnrollmentController extends Controller
         return response()->json(['message' => 'Status pendaftaran diperbarui', 'data' => $enrollment], 200);
     }
 
-    /**
-     * DELETE /api/enrollments/{enrollment}
-     */
     public function destroy(Request $request, Enrollment $enrollment)
     {
         $user = $request->user();
 
-        if ($user instanceof Volunteer) {
-            if ($enrollment->volunteer_id !== $user->volunteer_id) {
-                return response()->json(['message' => 'Forbidden'], 403);
-            }
-        } elseif (! ($user instanceof \App\Models\Admin)) {
+        if ($user instanceof Volunteer && $enrollment->volunteer_id !== $user->volunteer_id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        } elseif (!($user instanceof \App\Models\Admin)) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
@@ -211,9 +174,6 @@ class EnrollmentController extends Controller
         return response()->json(['message' => 'Pendaftaran dibatalkan / dihapus'], 200);
     }
 
-    /**
-     * GET /api/user/{volunteer}/enrollments
-     */
     public function getByUser(Volunteer $volunteer)
     {
         $enrollments = Enrollment::with('activity')
@@ -223,18 +183,13 @@ class EnrollmentController extends Controller
         return response()->json(['message' => 'Daftar pendaftaran user', 'data' => $enrollments], 200);
     }
 
-    /**
-     * GET /api/activity/{activity}/enrollments
-     */
     public function getByActivity(Request $request, Activity $activity)
     {
         $user = $request->user();
 
-        if ($user instanceof Organizer) {
-            if ($activity->organizer_id !== $user->organizer_id) {
-                return response()->json(['message' => 'Forbidden'], 403);
-            }
-        } elseif (! ($user instanceof \App\Models\Admin)) {
+        if ($user instanceof Organizer && $activity->organizer_id !== $user->organizer_id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        } elseif (!($user instanceof \App\Models\Admin)) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 

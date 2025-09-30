@@ -43,6 +43,16 @@ Route::middleware('auth:api')->group(function () {
         Route::apiResource('volunteers', VolunteerController::class);
     });
     
+    // Rute untuk pendaftaran kegiatan
+    Route::get('/enrollments', [EnrollmentController::class, 'index']); // GET semua pendaftaran
+    Route::get('/enrollments/{id}', [EnrollmentController::class, 'show']); // GET detail
+    Route::post('/enrollments', [EnrollmentController::class, 'store']); // POST daftar kegiatan
+    Route::put('/enrollments/{id}', [EnrollmentController::class, 'update']); // PUT update
+    Route::patch('/enrollments/{id}', [EnrollmentController::class, 'update']); // PATCH update partial
+    Route::delete('/enrollments/{id}', [EnrollmentController::class, 'destroy']); // DELETE pendaftaran
+    Route::patch('/enrollments/{id}/status', [EnrollmentController::class, 'updateStatus']); 
+    Route::get('/user/{volunteer}/enrollments', [EnrollmentController::class, 'getByUser']); 
+    Route::get('/activity/{activity}/enrollments', [EnrollmentController::class, 'getByActivity']); 
 });
 
 Route::prefix('activity_request')->group(function () {
