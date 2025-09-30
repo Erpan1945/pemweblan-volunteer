@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Authenticate::redirectUsing(function($request){
+            abort(response()->json(['message' => 'Unauthorized'], 401));
+        });
         // Menghilangkan wrapper "data" dari JSON Resource
         JsonResource::withoutWrapping();
     }

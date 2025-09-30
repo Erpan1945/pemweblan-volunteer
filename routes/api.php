@@ -41,31 +41,49 @@ Route::post('/register/organizer', [AuthController::class, 'registerOrganizer'])
 Route::post('/login', [AuthController::class, 'login']);
 
 // --- Rute yang Memerlukan Autentikasi (WAJIB LOGIN DENGAN TOKEN) ---
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:organizer,volunteer,admin')->group(function () {    
+    // Route LOGOUT
+    Route::post('/logout', [AuthController::class, 'logout']);
     
-    // Semua rute profil disatukan di sini
-    // Semua rute profil disatukan di sini
+    // Route PROFIL
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
     Route::patch('/profile/password', [ProfileController::class, 'updatePassword']);
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar']);
     
-    // Rute Logout
-    // Rute Logout
-    Route::post('/logout', [AuthController::class, 'logout']);
+    // Route khusus VOLUNTEERS
+    Route::middleware('auth:volunteer')->group(function() {
+        // Route FOLLOWING
+        Route::get('/following', [FollowingController::class, 'index']); 
+        Route::get('/follower/{organizer}', [FollowingController::class, 'showFollower']); //menampilkan detail pengikut suatu penyelenggara
+        Route::get('/following/{volunteer}', [FollowingController::class, 'show']); //menampilkan detail penyelenggara yang diikuti oleh volunteer
+        Route::post('/following', [FollowingController::class, 'store']); //memfollow penyelenggara
+        Route::patch('/following/{organizer}/notifications', [FollowingController::class, 'update']); //update notifikasi
+        Route::delete('/following/{organizer}', [FollowingController::class, 'destroy']); //batal follow
+        
+        //Route MANAJEMEN DAFTAR KEGIATAN
+        Route::post('/activity_lists', [ActivityListController::class, 'store']);
+        Route::get('/volunteers/{volunteer}/activity_lists', [ActivityListController::class, 'index']);
+        Route::post('/activities/{activity}/activity_lists',  [ActivityListController::class, 'save']);
+        Route::get('/activity_lists/{activity_list}', [ActivityListController::class, 'show']);
+        Route::delete('/activity_lists/{activity_list}', [ActivityListController::class, 'destroy']);
+        Route::delete('/activity_lists/{activity_list}/activities/{activity}', [ActivityListController::class, 'remove']);
+        Route::put('/activities/{activity}/activity_lists', [ActivityListController::class, 'update']);
+        Route::put('/activity_lists/{activity_list}/name', [ActivityListController::class, 'rename']);
+    });
 
     // Rute untuk Permohonan Kegiatan (Activity Request)
     
+
     // Rute Khusus Admin
-    Route::middleware('admin')->group(function() {
+    Route::middleware('auth:admin')->group(function() {
         Route::apiResource('admins', AdminController::class);
         // Admin bisa melakukan segalanya kecuali melihat daftar publik (index & show)
         Route::apiResource('organizers', OrganizerController::class)->except(['index', 'show']);
         // Admin bisa melakukan segalanya kecuali melihat daftar publik (index & show)
         Route::apiResource('organizers', OrganizerController::class)->except(['index', 'show']);
         Route::apiResource('volunteers', VolunteerController::class);
-    });
-    
+    });    
 });
 
 Route::prefix('activity_request')->group(function () {
@@ -95,12 +113,6 @@ Route::apiResource('volunteers', VolunteerController::class)->only(['index', 'sh
 
 Route::get('/user', [UserController::class, 'show']);
 
-Route::get('/following', [FollowingController::class, 'index']); 
-Route::get('/follower/{organizer}', [FollowingController::class, 'showFollower']); //menampilkan detail pengikut suatu penyelenggara
-Route::get('/following/{volunteer}', [FollowingController::class, 'show']); //menampilkan detail penyelenggara yang diikuti oleh volunteer
-Route::post('/following', [FollowingController::class, 'store']); //memfollow penyelenggara
-Route::patch('/following/{organizer}/notifications', [FollowingController::class, 'update']); //update notifikasi
-Route::delete('/following/{organizer}', [FollowingController::class, 'destroy']); //batal follow
 
 // Route::prefix('activity_request')->group(function () {
 //     Route::post('/', [ActivityRequestController::class, 'store']);
@@ -144,3 +156,5 @@ Route::delete('/following/{organizer}', [FollowingController::class, 'destroy'])
 // Rute untuk mendapatkan informasi user berdasarkan ID (contoh)
 Route::get('/user/{id}', [UserController::class, 'show']);
 
+// Punya van jangan dihapus (pulldulu ya teman2)
+// --- DAFTAR KEGIATAN
