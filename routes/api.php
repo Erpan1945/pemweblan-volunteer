@@ -137,5 +137,3 @@ Route::get('/user', [UserController::class, 'show']);
 // Rute untuk mendapatkan informasi user berdasarkan ID (contoh)
 Route::get('/user/{id}', [UserController::class, 'show']);
 
-// Punya van jangan dihapus (pulldulu ya teman2)
-// --- DAFTAR KEGIATAN
