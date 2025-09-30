@@ -51,16 +51,17 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
     Route::patch('/profile/password', [ProfileController::class, 'updatePassword']);
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar']);
     
+    // Route FOLLOWING
+    Route::get('/following', [FollowingController::class, 'index']); 
+    Route::get('/follower/{organizer}', [FollowingController::class, 'showFollower']); //menampilkan detail pengikut suatu penyelenggara
+    Route::get('/following/{volunteer}', [FollowingController::class, 'show']); //menampilkan detail penyelenggara yang diikuti oleh volunteer
+    Route::post('/following', [FollowingController::class, 'store']); //memfollow penyelenggara
+    Route::patch('/following/{organizer}/notifications', [FollowingController::class, 'update']); //update notifikasi
+    Route::delete('/following/{organizer}', [FollowingController::class, 'destroy']); //batal follow
+        
+    
     // Route khusus VOLUNTEERS
     Route::middleware('auth:volunteer')->group(function() {
-        // Route FOLLOWING
-        Route::get('/following', [FollowingController::class, 'index']); 
-        Route::get('/follower/{organizer}', [FollowingController::class, 'showFollower']); //menampilkan detail pengikut suatu penyelenggara
-        Route::get('/following/{volunteer}', [FollowingController::class, 'show']); //menampilkan detail penyelenggara yang diikuti oleh volunteer
-        Route::post('/following', [FollowingController::class, 'store']); //memfollow penyelenggara
-        Route::patch('/following/{organizer}/notifications', [FollowingController::class, 'update']); //update notifikasi
-        Route::delete('/following/{organizer}', [FollowingController::class, 'destroy']); //batal follow
-        
         //Route MANAJEMEN DAFTAR KEGIATAN
         Route::post('/activity_lists', [ActivityListController::class, 'store']);
         Route::get('/volunteers/{volunteer}/activity_lists', [ActivityListController::class, 'index']);
