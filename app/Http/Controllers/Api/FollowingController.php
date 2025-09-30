@@ -43,7 +43,7 @@ class FollowingController extends Controller
             'notification' => 'required|boolean',
         ]);
 
-        $volunteer = auth()->user();
+        $volunteer = auth('api')->user();
 
         if(!$volunteer instanceof \App\Models\Volunteer){
             return response()->json([
@@ -71,7 +71,7 @@ class FollowingController extends Controller
             'notification' => 'required|boolean',
         ]); 
 
-        $volunteer = auth()->user();
+        $volunteer = auth('api')->user();
         if(!$volunteer instanceof \App\Models\Volunteer){
             return response()->json([
                 'message' => 'Hanya volunteer yang bisa melakukan mengubah setelan notifikasi'
@@ -100,11 +100,7 @@ class FollowingController extends Controller
     }
 
     public function destroy(Organizer $organizer){
-        $validated = $request->validate([
-            'volunteer_id' => 'required|exists:volunteers,volunteer_id',
-        ]);
-
-        $volunteer = auth()->user();
+        $volunteer = auth('api')->user();
         if(!$volunteer instanceof \App\Models\Volunteer){
             return response()->json([
                 'message' => 'Hanya volunteer yang bisa melakukan mengubah setelan notifikasi'

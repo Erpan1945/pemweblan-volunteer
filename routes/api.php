@@ -92,7 +92,6 @@ Route::apiResource('volunteers', VolunteerController::class)->only(['index', 'sh
 // Rute untuk mendapatkan informasi user berdasarkan ID (contoh)
 Route::get('/user/{id}', [UserController::class, 'show']);
 
-<<<<<<< HEAD
 Route::middleware('auth:api')->group(function () {
     Route::get('/enrollments', [EnrollmentController::class, 'index']);
     Route::get('/enrollments/{id}', [EnrollmentController::class, 'show']);
@@ -106,5 +105,3 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user/{id}/enrollments', [EnrollmentController::class, 'getByUser']);
     Route::get('/activity/{id}/enrollments', [EnrollmentController::class, 'getByActivity']);
 });
-=======
->>>>>>> ba00ed2cb795e45eedd6d016c514fa804e56c174
