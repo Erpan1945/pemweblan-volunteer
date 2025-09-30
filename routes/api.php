@@ -102,6 +102,11 @@ Route::post('/following', [FollowingController::class, 'store']); //memfollow pe
 Route::patch('/following/{organizer}/notifications', [FollowingController::class, 'update']); //update notifikasi
 Route::delete('/following/{organizer}', [FollowingController::class, 'destroy']); //batal follow
 
+
+Route::get('/review/{activity_id}', [ReviewController::class, 'index']);
+Route::post('/review', [ReviewController::class, 'store']);
+Route::delete('/review/{id}', [ReviewController::class, 'destroy']);
+
 // Route::prefix('activity_request')->group(function () {
 //     Route::post('/', [ActivityRequestController::class, 'store']);
 //     Route::get('/', [ActivityRequestController::class, 'index']);
