@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Review;
+use App\Models\Volunteer;
+use App\Models\Organizer;
+use App\Models\Activity;
 
 class ReviewController extends Controller
 {
@@ -47,10 +50,11 @@ class ReviewController extends Controller
     {
         $user = $request->user();
 
-        if (!($user instanceof \App\Models\Volunteer)) {
+        if (!($user instanceof \App\Models\Organizer)) {
             return response()->json(['message' => 'Hanya volunteer yang bisa membuat review.']);
         }
 
+        if (!(user instanceof \App\Models\Volunteer)) {   
         $validated = $request->validate([
             'activity_id' => 'required|exists:activities,activity_id',
             'rating'      => 'required|integer|min:1|max:5',
@@ -68,6 +72,7 @@ class ReviewController extends Controller
             'message' => 'Review berhasil dibuat!',
             'review'  => $review
         ], 201);
+    }
     }
 //tampil review by review_id
     public function filterOne($id)
