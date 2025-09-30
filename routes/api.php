@@ -15,28 +15,6 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EnrollmentController;
 use App\Http\Controllers\Api\ReviewController;
 
-
-//Publikasi Kegiatan (Activities)
-
-// 1. Get All Activities (Mendapatkan semua kegiatan)
-// Method: GET, Endpoint: /api/activities
-Route::get('activities', [ActivityController::class, 'index']);
-// 2. Create New Activity (Membuat kegiatan baru)
-// Method: POST, Endpoint: /api/activities
-Route::post('activities', [ActivityController::class, 'store']);
-// 3. Get Single Activity (Mendapatkan detail satu kegiatan)
-// Method: GET, Endpoint: /api/activities/{id}
-Route::get('activities/{activity}', [ActivityController::class, 'show']);
-// 4. Update Activity (PUT - Memperbarui seluruh data)
-// Method: PUT, Endpoint: /api/activities/{id}
-Route::put('activities/{activity}', [ActivityController::class, 'update']);
-// 5. Update Activity (PATCH - Memperbarui sebagian data)
-// Method: PATCH, Endpoint: /api/activities/{id}
-Route::patch('activities/{activity}', [ActivityController::class, 'patch']);
-// 6. Delete Activity (Menghapus kegiatan)
-// Method: DELETE, Endpoint: /api/activities/{id}
-Route::delete('activities/{activity}', [ActivityController::class, 'destroy']);
-
 Route::post('/register/volunteer', [AuthController::class, 'registerVolunteer']);
 Route::post('/register/organizer', [AuthController::class, 'registerOrganizer']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -83,19 +61,25 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
     Route::patch('/enrollments/{id}/status', [EnrollmentController::class, 'updateStatus']); 
     Route::get('/user/{volunteer}/enrollments', [EnrollmentController::class, 'getByUser']); 
     Route::get('/activity/{activity}/enrollments', [EnrollmentController::class, 'getByActivity']); 
-
-
-Route::prefix('activity_request')->group(function () {
-    Route::post('/', [ActivityRequestController::class, 'store']);
-    Route::get('/', [ActivityRequestController::class, 'index']);
-    Route::get('/mine', [ActivityRequestController::class, 'mine']);
-    Route::get('/{id}', [ActivityRequestController::class, 'show']);
-    Route::put('/{id}', [ActivityRequestController::class, 'update']);
-    Route::delete('/{id}', [ActivityRequestController::class, 'destroy']);
     
-    // Admin untuk Menyetujui/Menolak
-    Route::patch('/{id}/approve', [ActivityRequestController::class, 'approve'])->middleware('admin');
-    Route::patch('/{id}/reject', [ActivityRequestController::class, 'reject'])->middleware('admin');
+    // Rute untuk publikasi kegiatan
+    Route::post('activities', [ActivityController::class, 'store']);
+    Route::put('activities/{activity}', [ActivityController::class, 'update']);
+    Route::patch('activities/{activity}', [ActivityController::class, 'patch']);
+    Route::delete('activities/{activity}', [ActivityController::class, 'destroy']);
+
+    // Rute untuk permohonan kegiatan
+    Route::prefix('activity_request')->group(function () {
+        Route::post('/', [ActivityRequestController::class, 'store']);
+        Route::get('/', [ActivityRequestController::class, 'index']);
+        Route::get('/mine', [ActivityRequestController::class, 'mine']);
+        Route::get('/{id}', [ActivityRequestController::class, 'show']);
+        Route::put('/{id}', [ActivityRequestController::class, 'update']);
+        Route::delete('/{id}', [ActivityRequestController::class, 'destroy']);
+        
+        // Admin untuk Menyetujui/Menolak
+        Route::patch('/{id}/approve', [ActivityRequestController::class, 'approve'])->middleware('admin');
+        Route::patch('/{id}/reject', [ActivityRequestController::class, 'reject'])->middleware('admin');
     });
     
 
@@ -129,3 +113,7 @@ Route::prefix('activity_request')->group(function () {
     Route::get('/user/{id}', [UserController::class, 'show']);
 
 });
+
+//Publikasi Kegiatan (publik)
+Route::get('activities', [ActivityController::class, 'index']);
+Route::get('activities/{activity}', [ActivityController::class, 'show']);

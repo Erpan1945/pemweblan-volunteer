@@ -4,82 +4,44 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\Organizer;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityController extends Controller
 {
     /**
-     * FUNGSI INDEX
+     * FUNGSI INDEX (Publik)
      * Menampilkan semua data kegiatan.
      */
     public function index()
     {
-        // Mengambil semua data dari model Activity, diurutkan dari yang terbaru
         $activities = Activity::latest()->get();
-        
-        // Mengembalikan response dalam format JSON
         return response()->json([
             'message' => 'Data kegiatan berhasil ditampilkan',
             'data' => $activities
-        ], 200); // HTTP Status 200 OK
+        ], 200);
     }
 
     /**
-     * FUNGSI STORE
+     * FUNGSI STORE (Khusus Organizer)
      * Menyimpan data kegiatan baru.
      */
     public function store(Request $request)
     {
-        // Menyiapkan aturan validasi untuk data yang masuk
-        $validator = Validator::make($request->all(), [
-            'organizer_id' => 'required|integer|exists:organizers,organizer_id',
-            'title' => 'required|string|min:3|max:255',
-            'description' => 'required|string|min:10',
-            'registration_start_date' => 'required|date',
-            'registration_end_date' => 'required|date|after_or_equal:registration_start_date',
-            'activity_start_date' => 'required|date',
-            'activity_end_date' => 'required|date|after_or_equal:activity_start_date',
-            'location' => 'required|string|min:3|max:255',
-            'thumbnail' => 'nullable|url',
-        ]);
+        // Dapatkan user organizer yang sedang login
+        $organizer = auth('organizer')->user();
 
-        // Jika validasi gagal, kembalikan error
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422); // HTTP Status 422 Unprocessable Entity
+        // Cek apakah user adalah Organizer
+        if (!$organizer instanceof Organizer) {
+            return response()->json(['message' => 'Hanya organizer yang dapat membuat kegiatan'], 403);
         }
 
-        // Jika validasi berhasil, buat data baru
-        $activity = Activity::create($request->all());
-
-        return response()->json([
-            'message' => 'Kegiatan baru berhasil dibuat',
-            'data' => $activity
-        ], 201); // HTTP Status 201 Created
-    }
-
-    /**
-     * FUNGSI SHOW
-     * Menampilkan detail satu kegiatan berdasarkan ID.
-     */
-    public function show(Activity $activity)
-    {
-        // Laravel secara otomatis akan mencari Activity berdasarkan ID yang ada di URL
-        return response()->json([
-            'message' => 'Detail kegiatan berhasil ditampilkan',
-            'data' => $activity
-        ], 200); // HTTP Status 200 OK
-    }
-
-    /**
-     * FUNGSI UPDATE (PUT)
-     * Mengupdate keseluruhan data kegiatan.
-     */
-    public function update(Request $request, Activity $activity)
-    {
-        // Validasi untuk PUT mengharuskan semua field diisi
+        // Validasi data yang masuk
         $validator = Validator::make($request->all(), [
-            'organizer_id' => 'required|integer|exists:organizers,organizer_id',
+            // 'organizer_id' dihapus karena akan diisi otomatis
             'title' => 'required|string|min:3|max:255',
             'description' => 'required|string|min:10',
             'registration_start_date' => 'required|date',
@@ -93,53 +55,107 @@ class ActivityController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
+        
+        // Gabungkan data tervalidasi dengan ID organizer yang login
+        $data = array_merge($validator->validated(), ['organizer_id' => $organizer->organizer_id]);
 
-        // Update data kegiatan yang ada dengan data baru
+        $activity = Activity::create($data);
+
+        return response()->json([
+            'message' => 'Kegiatan baru berhasil dibuat',
+            'data' => $activity
+        ], 201);
+    }
+
+    /**
+     * FUNGSI SHOW (Publik)
+     * Menampilkan detail satu kegiatan berdasarkan ID.
+     */
+    public function show(Activity $activity)
+    {
+        return response()->json([
+            'message' => 'Detail kegiatan berhasil ditampilkan',
+            'data' => $activity
+        ], 200);
+    }
+
+    /**
+     * FUNGSI UPDATE (Khusus Organizer Pemilik & Admin)
+     * Mengupdate keseluruhan data kegiatan.
+     */
+    public function update(Request $request, Activity $activity)
+    {
+        // Dapatkan user yang sedang login dari guard default
+        $user = Auth::user();
+
+        // Cek apakah user adalah Admin atau Organizer pemilik
+        $isOwner = ($user instanceof Organizer && $user->organizer_id === $activity->organizer_id);
+        $isAdmin = ($user instanceof Admin);
+
+        if (!$isOwner && !$isAdmin) {
+            return response()->json(['message' => 'Anda tidak memiliki izin untuk mengubah kegiatan ini'], 403);
+        }
+        
+        // Lanjutkan dengan validasi dan update
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|min:3|max:255',
+            'description' => 'required|string|min:10',
+            // ... (validasi lainnya)
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
         $activity->update($request->all());
 
         return response()->json([
             'message' => 'Data kegiatan berhasil diperbarui',
             'data' => $activity
-        ], 200); // HTTP Status 200 OK
+        ], 200);
     }
 
     /**
-     * FUNGSI PATCH
+     * FUNGSI PATCH (Khusus Organizer Pemilik & Admin)
      * Mengupdate sebagian data kegiatan.
      */
     public function patch(Request $request, Activity $activity)
     {
-        // Validasi untuk PATCH bersifat 'sometimes', artinya hanya memvalidasi field yang dikirim
-        $validator = Validator::make($request->all(), [
-            'organizer_id' => 'sometimes|integer|exists:organizers,organizer_id',
-            'title' => 'sometimes|string|min:3|max:255',
-            'description' => 'sometimes|string|min:10',
-            // ... (aturan validasi lainnya dibuat 'sometimes')
-        ]);
+        $user = Auth::user();
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        $isOwner = ($user instanceof Organizer && $user->organizer_id === $activity->organizer_id);
+        $isAdmin = ($user instanceof Admin);
+
+        if (!$isOwner && !$isAdmin) {
+            return response()->json(['message' => 'Anda tidak memiliki izin untuk mengubah kegiatan ini'], 403);
         }
-
-        // Update data kegiatan dengan data parsial yang dikirim
+        
+        // Update dengan data parsial yang dikirim
         $activity->update($request->all());
 
         return response()->json([
             'message' => 'Data kegiatan berhasil diperbarui sebagian',
             'data' => $activity
-        ], 200); // HTTP Status 200 OK
+        ], 200);
     }
 
     /**
-     * FUNGSI DESTROY
+     * FUNGSI DESTROY (Khusus Organizer Pemilik & Admin)
      * Menghapus data kegiatan.
      */
     public function destroy(Activity $activity)
     {
+        $user = Auth::user();
+
+        $isOwner = ($user instanceof Organizer && $user->organizer_id === $activity->organizer_id);
+        $isAdmin = ($user instanceof Admin);
+
+        if (!$isOwner && !$isAdmin) {
+            return response()->json(['message' => 'Anda tidak memiliki izin untuk menghapus kegiatan ini'], 403);
+        }
+
         $activity->delete();
 
-        return response()->json([
-            'message' => 'Data kegiatan berhasil dihapus'
-        ], 200); // HTTP Status 200 OK
+        return response()->json(['message' => 'Data kegiatan berhasil dihapus'], 200);
     }
 }
