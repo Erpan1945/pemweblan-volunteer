@@ -116,4 +116,3 @@ Route::delete('/following/{organizer}', [FollowingController::class, 'destroy'])
 
 // Rute untuk mendapatkan informasi user berdasarkan ID (contoh)
 Route::get('/user/{id}', [UserController::class, 'show']);
-
