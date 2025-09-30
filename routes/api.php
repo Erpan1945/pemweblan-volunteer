@@ -99,13 +99,6 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
     });    
 });
 
-Route::prefix('activities')->controller(ActivityController::class)->group(function () {
-    Route::get('/mine', 'mine')->name('activities.mine');
-    Route::patch('/{activity}/schedule', 'schedule')->name('activities.schedule');
-    Route::patch('/{activity}/approve', 'approve')->name('activities.approve')->middleware('admin'); // Hanya admin
-    Route::patch('/{activity}/reject', 'reject')->name('activities.reject')->middleware('admin');   // Hanya admin
-});
-
 Route::get('/review/{activity_id}', [ReviewController::class, 'index']);
 Route::post('/review', [ReviewController::class, 'store']);
 Route::delete('/review/{id}', [ReviewController::class, 'destroy']);
@@ -116,7 +109,6 @@ Route::apiResource('organizers', OrganizerController::class)->only(['index', 'sh
 Route::apiResource('volunteers', VolunteerController::class)->only(['index', 'show']); // Hanya index & show yang publik
 
 Route::get('/user', [UserController::class, 'show']);
-
 
 // Rute untuk mendapatkan informasi user berdasarkan ID (contoh)
 Route::get('/user/{id}', [UserController::class, 'show']);
