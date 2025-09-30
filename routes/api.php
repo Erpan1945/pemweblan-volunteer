@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\ActivityListController;
-use App\Http\Controllers\Api\ActivityListController;
 use App\Http\Controllers\Api\OrganizerController;
 use App\Http\Controllers\Api\VolunteerController;
 use App\Http\Controllers\Api\UserController;
@@ -12,7 +11,6 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\FollowingController;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\EnrollmentController;
 use App\Http\Controllers\Api\EnrollmentController;
 
 Route::post('/register/volunteer', [AuthController::class, 'registerVolunteer']);
