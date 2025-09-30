@@ -83,7 +83,7 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
     Route::patch('/enrollments/{id}/status', [EnrollmentController::class, 'updateStatus']); 
     Route::get('/user/{volunteer}/enrollments', [EnrollmentController::class, 'getByUser']); 
     Route::get('/activity/{activity}/enrollments', [EnrollmentController::class, 'getByActivity']); 
-});
+
 
 Route::prefix('activity_request')->group(function () {
     Route::post('/', [ActivityRequestController::class, 'store']);
@@ -110,9 +110,13 @@ Route::prefix('activity_request')->group(function () {
     });    
 });
 
-Route::get('/review/{activity_id}', [ReviewController::class, 'index']);
-Route::post('/review', [ReviewController::class, 'store']);
+//Rute CRUD Review
+Route::get('/review', [ReviewController::class, 'index']);
+Route::post('/review', [ReviewController::class, 'store']); //buat review
 Route::delete('/review/{id}', [ReviewController::class, 'destroy']);
+Route::get('/review/{id}', [ReviewController::class, 'filterOne']); //tampil satu2
+Route::put('/review/{id}', [ReviewController::class, 'update']);
+Route::get('/review/{activity_id}', [ReviewController::class, 'filterActivity']); //tampil dari aktivitas
 
 // Rute CRUD standar yang dibuat otomatis
 Route::apiResource('activities', ActivityController::class);
