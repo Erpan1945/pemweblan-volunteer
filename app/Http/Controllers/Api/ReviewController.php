@@ -65,7 +65,7 @@ class ReviewController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Review created successfully!',
+            'message' => 'Review berhasil dibuat!',
             'review'  => $review
         ], 201);
     }
