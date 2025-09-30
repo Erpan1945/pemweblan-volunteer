@@ -36,8 +36,8 @@ class ActivityListController extends Controller
 
     public function save(Request $request, Activity $activity){
         $validated = $request->validate([
-        'list_id' => 'required|exists:activity_lists,list_id',
-            ]);
+            'list_id' => 'required|exists:activity_lists,list_id',
+        ]);
             
             $list = ActivityList::findOrFail($validated['list_id']);
 

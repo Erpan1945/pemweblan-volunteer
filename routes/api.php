@@ -108,7 +108,7 @@ Route::prefix('activity_request')->group(function () {
         Route::apiResource('organizers', OrganizerController::class)->except(['index', 'show']);
         Route::apiResource('volunteers', VolunteerController::class);
     });    
-});
+
 
 //Rute CRUD Review
 Route::get('/review', [ReviewController::class, 'index']);
@@ -128,5 +128,3 @@ Route::get('/user', [UserController::class, 'show']);
 // Rute untuk mendapatkan informasi user berdasarkan ID (contoh)
 Route::get('/user/{id}', [UserController::class, 'show']);
 
-// Punya van jangan dihapus (pulldulu ya teman2)
-// --- DAFTAR KEGIATAN

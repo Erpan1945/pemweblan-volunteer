@@ -46,7 +46,7 @@ class ActivityRequestController extends Controller
         if (!auth('admin')->check()) {
             return response()->json(['message' => 'Akses ditolak. Hanya untuk Admin.'], 403);
         }
-        return response()->json(ActivityRequest::all(), 200);
+        return response()->json(['message' => 'Daftar semua permohonan kegiatan', 'data' => ActivityRequest::all()], 200);
     }
 
     // GET /api/activity_request/mine
@@ -67,8 +67,8 @@ class ActivityRequestController extends Controller
     public function show($id)
     {
         // Siapapun yang login (volunteer, organizer, admin) boleh melihat detail
-        if (!auth('volunteer')->check() && !auth('organizer')->check() && !auth('admin')->check()) {
-            return response()->json(['message' => 'Anda harus login untuk melihat detail'], 401);
+        if (!auth('organizer')->check() && !auth('admin')->check()) {
+            return response()->json(['message' => 'Akses ditolak. Hanya untuk Admin dan Organizer'], 403);
         }
 
         $activityRequest = ActivityRequest::find($id);
@@ -98,7 +98,13 @@ class ActivityRequestController extends Controller
 
         $validated = $request->validate([
             'title' => 'sometimes|required|string|max:255',
-            // ... (validasi lainnya sesuaikan)
+            'description' => 'nullable|string',
+            'location' => 'nullable|string|max:255',
+            'registration_start_date' => 'required|date',
+            'registration_end_date' => 'required|date|after:registration_start_date',
+            'activity_start_date' => 'required|date|after:registration_end_date',
+            'activity_end_date' => 'required|date|after:activity_start_date',
+            'thumbnail' => 'nullable|max:2048',
         ]);
 
         $activityRequest->update($validated);
