@@ -13,6 +13,7 @@ class ReviewController extends Controller
      */
     public function index(Request $request)
     {
+        
         $user = $request->user();
 
         if ($user instanceof \App\Models\Admin) {
@@ -68,6 +69,11 @@ class ReviewController extends Controller
             'review'  => $review
         ], 201);
     }
+//tampil review by review_id
+    public function filterOne($id)
+{
+    return Review::with(['volunteer', 'organizer', 'activity'])->findOrFail($id);
+}
 
     /**
      *hapus review
@@ -87,4 +93,34 @@ class ReviewController extends Controller
 
         return response()->json(['message' => 'Forbidden'], 403);
     }
+
+    //update review
+    public function update(Request $request, $id)
+{
+    $review = Review::findOrFail($id);
+    $user = $request->user();
+
+    if (!($user instanceof \App\Models\Volunteer) || $review->volunteer_id !== $user->volunteer_id) {
+        return response()->json(['message' => 'Forbidden'], 403);
+    }
+
+    $validated = $request->validate([
+        'rating'  => 'integer|min:1|max:5',
+        'comment' => 'nullable|string',
+    ]);
+
+    $review->update($validated);
+
+    return response()->json(['message' => 'Review updated', 'review' => $review]);
+}
+
+public function filterActivity($activity_id)
+{
+    return Review::with(['volunteer', 'organizer', 'activity'])
+        ->where('activity_id', $activity_id)
+        ->latest()
+        ->get();
+}
+
+
 }
