@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             ActivityListSeeder::class,
             EnrollmentSeeder::class,
             ReviewSeeder::class,
+            ListDetailSeeder::class,
             UserSeeder::class,
         ]);
     }

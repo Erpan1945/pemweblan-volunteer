@@ -36,10 +36,6 @@ return [
     */
 
     'guards' => [
-        'admin' => [
-            'driver' => 'session',
-            'provider' => 'admins',
-        ],
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -52,23 +48,8 @@ return [
         ],
 
         'api' => [
-            'driver' => 'jwt',
-            'provider' => 'volunteers', 
-        ],
-
-        'admin' => [
-            'driver' => 'jwt',
-            'provider' => 'admins',
-        ],
-
-        'volunteer' => [
-            'driver' => 'jwt',
-            'provider' => 'volunteers',
-        ],
-
-        'organizer' => [
-            'driver' => 'jwt',
-            'provider' => 'organizers',
+        'driver' => 'jwt',
+        'provider' => 'volunteers', 
         ],
     ],
 
@@ -90,18 +71,20 @@ return [
     */
 
     'providers' => [
-        'admins' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Admin::class,
-        ],
         'volunteers' => [
             'driver' => 'eloquent',
             'model' => App\Models\Volunteer::class,
         ],
-        'organizers' => [
+
+        'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Organizer::class,
+            'model' => App\Models\Admin::class,
         ],
+
+        // 'users' => [
+        //     'driver' => 'database',
+        //     'table' => 'users',
+        // ],
     ],
 
     /*

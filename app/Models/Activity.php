@@ -22,8 +22,4 @@ class Activity extends Model
         // Foreign Key di tabel activities, Owner Key di tabel organizers
         return $this->belongsTo(Organizer::class, 'organizer_id', 'organizer_id');
     }
-
-    public function activity_lists(){
-        return $this->belongsToMany(ActivityList::class, 'activity_activity_list', 'activity_id', 'list_id');
-    }
 }
