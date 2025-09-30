@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\FollowingController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EnrollmentController;
+use App\Http\Controllers\Api\ReviewController;
 
 
 //Publikasi Kegiatan (Activities)
@@ -73,6 +74,18 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
     });
 
     // Rute untuk Permohonan Kegiatan (Activity Request)
+    Route::prefix('activity_request')->group(function () {
+    Route::post('/', [ActivityRequestController::class, 'store']);
+    Route::get('/', [ActivityRequestController::class, 'index']);
+    Route::get('/mine', [ActivityRequestController::class, 'mine']);
+    Route::get('/{id}', [ActivityRequestController::class, 'show']);
+    Route::put('/{id}', [ActivityRequestController::class, 'update']);
+    Route::delete('/{id}', [ActivityRequestController::class, 'destroy']);
+    
+    // Admin untuk Menyetujui/Menolak
+    Route::patch('/{id}/approve', [ActivityRequestController::class, 'approve'])->middleware('admin');
+    Route::patch('/{id}/reject', [ActivityRequestController::class, 'reject'])->middleware('admin');
+    });
     
 
     // Rute Khusus Admin
@@ -86,25 +99,16 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
     });    
 });
 
-Route::prefix('activity_request')->group(function () {
-    Route::post('/', [ActivityRequestController::class, 'store']);
-    Route::get('/', [ActivityRequestController::class, 'index']);
-    Route::get('/mine', [ActivityRequestController::class, 'mine']);
-    Route::get('/{id}', [ActivityRequestController::class, 'show']);
-    Route::put('/{id}', [ActivityRequestController::class, 'update']);
-    Route::delete('/{id}', [ActivityRequestController::class, 'destroy']);
-    
-    // Admin untuk Menyetujui/Menolak
-    Route::patch('/{id}/approve', [ActivityRequestController::class, 'approve'])->middleware('admin');
-    Route::patch('/{id}/reject', [ActivityRequestController::class, 'reject'])->middleware('admin');
-});
-
 Route::prefix('activities')->controller(ActivityController::class)->group(function () {
     Route::get('/mine', 'mine')->name('activities.mine');
     Route::patch('/{activity}/schedule', 'schedule')->name('activities.schedule');
     Route::patch('/{activity}/approve', 'approve')->name('activities.approve')->middleware('admin'); // Hanya admin
     Route::patch('/{activity}/reject', 'reject')->name('activities.reject')->middleware('admin');   // Hanya admin
 });
+
+Route::get('/review/{activity_id}', [ReviewController::class, 'index']);
+Route::post('/review', [ReviewController::class, 'store']);
+Route::delete('/review/{id}', [ReviewController::class, 'destroy']);
 
 // Rute CRUD standar yang dibuat otomatis
 Route::apiResource('activities', ActivityController::class);
