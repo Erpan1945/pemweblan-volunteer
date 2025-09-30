@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\FollowingController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\EnrollmentController;
 
 
 // --- Rute Autentikasi (Publik) ---
@@ -79,3 +80,17 @@ Route::apiResource('volunteers', VolunteerController::class)->only(['index', 'sh
 
 // Rute untuk mendapatkan informasi user berdasarkan ID (contoh)
 Route::get('/user/{id}', [UserController::class, 'show']);
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/enrollments', [EnrollmentController::class, 'index']);
+    Route::get('/enrollments/{id}', [EnrollmentController::class, 'show']);
+    Route::post('/enrollments', [EnrollmentController::class, 'store']);
+    Route::put('/enrollments/{id}', [EnrollmentController::class, 'update']);
+    Route::patch('/enrollments/{id}', [EnrollmentController::class, 'update']);
+    Route::patch('/enrollments/{id}/status', [EnrollmentController::class, 'updateStatus']);
+    Route::delete('/enrollments/{id}', [EnrollmentController::class, 'destroy']);
+
+    // helper routes
+    Route::get('/user/{id}/enrollments', [EnrollmentController::class, 'getByUser']);
+    Route::get('/activity/{id}/enrollments', [EnrollmentController::class, 'getByActivity']);
+});
