@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\FollowingController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EnrollmentController;
+use App\Http\Controllers\Api\ReviewController;
 
 
 //Publikasi Kegiatan (Activities)
@@ -50,17 +51,18 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update']);
     Route::patch('/profile/password', [ProfileController::class, 'updatePassword']);
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar']);
+
+    // Route FOLLOWING
+    Route::get('/following', [FollowingController::class, 'index']); 
+    Route::get('/follower/{organizer}', [FollowingController::class, 'showFollower']);
+    Route::get('/following/{volunteer}', [FollowingController::class, 'show']); 
+    Route::post('/following', [FollowingController::class, 'store']); 
+    Route::patch('/following/{organizer}/notifications', [FollowingController::class, 'update']);
+    Route::delete('/following/{organizer}', [FollowingController::class, 'destroy']); 
+        
     
     // Route khusus VOLUNTEERS
     Route::middleware('auth:volunteer')->group(function() {
-        // Route FOLLOWING
-        Route::get('/following', [FollowingController::class, 'index']); 
-        Route::get('/follower/{organizer}', [FollowingController::class, 'showFollower']); //menampilkan detail pengikut suatu penyelenggara
-        Route::get('/following/{volunteer}', [FollowingController::class, 'show']); //menampilkan detail penyelenggara yang diikuti oleh volunteer
-        Route::post('/following', [FollowingController::class, 'store']); //memfollow penyelenggara
-        Route::patch('/following/{organizer}/notifications', [FollowingController::class, 'update']); //update notifikasi
-        Route::delete('/following/{organizer}', [FollowingController::class, 'destroy']); //batal follow
-        
         //Route MANAJEMEN DAFTAR KEGIATAN
         Route::post('/activity_lists', [ActivityListController::class, 'store']);
         Route::get('/volunteers/{volunteer}/activity_lists', [ActivityListController::class, 'index']);
@@ -71,19 +73,17 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
         Route::put('/activities/{activity}/activity_lists', [ActivityListController::class, 'update']);
         Route::put('/activity_lists/{activity_list}/name', [ActivityListController::class, 'rename']);
     });
-
-    // Rute untuk Permohonan Kegiatan (Activity Request)
     
-
-    // Rute Khusus Admin
-    Route::middleware('auth:admin')->group(function() {
-        Route::apiResource('admins', AdminController::class);
-        // Admin bisa melakukan segalanya kecuali melihat daftar publik (index & show)
-        Route::apiResource('organizers', OrganizerController::class)->except(['index', 'show']);
-        // Admin bisa melakukan segalanya kecuali melihat daftar publik (index & show)
-        Route::apiResource('organizers', OrganizerController::class)->except(['index', 'show']);
-        Route::apiResource('volunteers', VolunteerController::class);
-    });    
+    // Rute untuk pendaftaran kegiatan
+    Route::get('/enrollments', [EnrollmentController::class, 'index']); // GET semua pendaftaran
+    Route::get('/enrollments/{id}', [EnrollmentController::class, 'show']); // GET detail
+    Route::post('/enrollments', [EnrollmentController::class, 'store']); // POST daftar kegiatan
+    Route::put('/enrollments/{id}', [EnrollmentController::class, 'update']); // PUT update
+    Route::patch('/enrollments/{id}', [EnrollmentController::class, 'update']); // PATCH update partial
+    Route::delete('/enrollments/{id}', [EnrollmentController::class, 'destroy']); // DELETE pendaftaran
+    Route::patch('/enrollments/{id}/status', [EnrollmentController::class, 'updateStatus']); 
+    Route::get('/user/{volunteer}/enrollments', [EnrollmentController::class, 'getByUser']); 
+    Route::get('/activity/{activity}/enrollments', [EnrollmentController::class, 'getByActivity']); 
 });
 
 Route::prefix('activity_request')->group(function () {
@@ -97,7 +97,19 @@ Route::prefix('activity_request')->group(function () {
     // Admin untuk Menyetujui/Menolak
     Route::patch('/{id}/approve', [ActivityRequestController::class, 'approve'])->middleware('admin');
     Route::patch('/{id}/reject', [ActivityRequestController::class, 'reject'])->middleware('admin');
-});
+    });
+    
+
+    // Rute Khusus Admin
+    Route::middleware('auth:admin')->group(function() {
+        Route::apiResource('admins', AdminController::class);
+        // Admin bisa melakukan segalanya kecuali melihat daftar publik (index & show)
+        Route::apiResource('organizers', OrganizerController::class)->except(['index', 'show']);
+        // Admin bisa melakukan segalanya kecuali melihat daftar publik (index & show)
+        Route::apiResource('organizers', OrganizerController::class)->except(['index', 'show']);
+        Route::apiResource('volunteers', VolunteerController::class);
+    });    
+
 
 Route::prefix('activities')->controller(ActivityController::class)->group(function () {
     Route::get('/mine', 'mine')->name('activities.mine');
@@ -105,6 +117,14 @@ Route::prefix('activities')->controller(ActivityController::class)->group(functi
     Route::patch('/{activity}/approve', 'approve')->name('activities.approve')->middleware('admin'); // Hanya admin
     Route::patch('/{activity}/reject', 'reject')->name('activities.reject')->middleware('admin');   // Hanya admin
 });
+
+//Rute CRUD Review
+Route::get('/review', [ReviewController::class, 'index']);
+Route::post('/review', [ReviewController::class, 'store']); //buat review
+Route::delete('/review/{id}', [ReviewController::class, 'destroy']);
+Route::get('/review/{id}', [ReviewController::class, 'filterOne']); //tampil satu2
+Route::put('/review/{id}', [ReviewController::class, 'update']);
+Route::get('/review/{activity_id}', [ReviewController::class, 'filterActivity']); //tampil dari aktivitas
 
 // Rute CRUD standar yang dibuat otomatis
 Route::apiResource('activities', ActivityController::class);
