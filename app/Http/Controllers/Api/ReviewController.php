@@ -54,7 +54,7 @@ class ReviewController extends Controller
             return response()->json(['message' => 'Hanya volunteer yang bisa membuat review.']);
         }
 
-        if (!(user instanceof \App\Models\Volunteer)) {   
+        if (!($user instanceof \App\Models\Volunteer)) {   
         $validated = $request->validate([
             'activity_id' => 'required|exists:activities,activity_id',
             'rating'      => 'required|integer|min:1|max:5',
