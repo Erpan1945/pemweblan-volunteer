@@ -77,8 +77,6 @@ class FollowingController extends Controller
                 'message' => 'Hanya volunteer yang bisa melakukan mengubah setelan notifikasi'
             ],403);
         }
-
-        $volunteer = Volunteer::findOrFail($validated['volunteer_id']);
         $updated = $volunteer->organizers()
             ->updateExistingPivot($organizer->organizer_id, [
                 'notification' => $validated['notification']
@@ -103,7 +101,7 @@ class FollowingController extends Controller
         $volunteer = auth('api')->user();
         if(!$volunteer instanceof \App\Models\Volunteer){
             return response()->json([
-                'message' => 'Hanya volunteer yang bisa melakukan mengubah setelan notifikasi'
+                'message' => 'Hanya volunteer yang bisa melakukan batal mengikuti'
             ],403);
         }
 
