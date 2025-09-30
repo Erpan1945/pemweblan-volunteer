@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ActivityController;
+use App\Http\Controllers\Api\ActivityListController;
 use App\Http\Controllers\Api\OrganizerController;
 use App\Http\Controllers\Api\VolunteerController;
 use App\Http\Controllers\Api\UserController;
@@ -58,6 +59,16 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/following', [FollowingController::class, 'store']);
     Route::patch('/following/{organizer}/notifications', [FollowingController::class, 'update']);
     Route::delete('/following/{organizer}', [FollowingController::class, 'destroy']);
+
+    // Rute Manajemen Daftar Aktivitas
+    Route::post('/activity_lists', [ActivityListController::class, 'store']);
+    Route::get('/volunteers/{volunteer}/activity_lists', [ActivityListController::class, 'index']);
+    Route::post('/activities/{activity}/activity_lists',  [ActivityListController::class, 'save']);
+    Route::get('/activity_lists/{activity_list}', [ActivityListController::class, 'show']);
+    Route::delete('/activity_lists/{activity_list}', [ActivityListController::class, 'destroy']);
+    Route::delete('/activity_lists/{activity_list}/activities/{activity}', [ActivityListController::class, 'remove']);
+    Route::put('/activities/{activity}/activity_lists', [ActivityListController::class, 'update']);
+    Route::put('/activity_lists/{activity_list}/name', [ActivityListController::class, 'rename']);
 });
 
 
@@ -79,3 +90,4 @@ Route::apiResource('volunteers', VolunteerController::class)->only(['index', 'sh
 
 // Rute untuk mendapatkan informasi user berdasarkan ID (contoh)
 Route::get('/user/{id}', [UserController::class, 'show']);
+
