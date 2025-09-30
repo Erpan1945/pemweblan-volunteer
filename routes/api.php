@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ActivityController;
+use App\Http\Controllers\Api\ActivityListController;
 use App\Http\Controllers\Api\OrganizerController;
 use App\Http\Controllers\Api\VolunteerController;
 use App\Http\Controllers\Api\UserController;
@@ -10,22 +11,23 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\FollowingController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\EnrollmentController;
 
 Route::post('/register/volunteer', [AuthController::class, 'registerVolunteer']);
 Route::post('/register/organizer', [AuthController::class, 'registerOrganizer']);
 Route::post('/login', [AuthController::class, 'login']);
 
-
-
 // --- Rute yang Memerlukan Autentikasi (WAJIB LOGIN DENGAN TOKEN) ---
 Route::middleware('auth:api')->group(function () {
     
+    // Semua rute profil disatukan di sini
     // Semua rute profil disatukan di sini
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
     Route::patch('/profile/password', [ProfileController::class, 'updatePassword']);
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar']);
     
+    // Rute Logout
     // Rute Logout
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -34,6 +36,8 @@ Route::middleware('auth:api')->group(function () {
     // Rute Khusus Admin
     Route::middleware('admin')->group(function() {
         Route::apiResource('admins', AdminController::class);
+        // Admin bisa melakukan segalanya kecuali melihat daftar publik (index & show)
+        Route::apiResource('organizers', OrganizerController::class)->except(['index', 'show']);
         // Admin bisa melakukan segalanya kecuali melihat daftar publik (index & show)
         Route::apiResource('organizers', OrganizerController::class)->except(['index', 'show']);
         Route::apiResource('volunteers', VolunteerController::class);

@@ -12,6 +12,7 @@ class FollowingController extends Controller
     //
 
     public function index(){
+        
         $followings = DB::table('following')->get();        
         return response()->json([
             'message' => 'daftar following',
@@ -28,7 +29,6 @@ class FollowingController extends Controller
     }
 
     public function show(Volunteer $volunteer){     
-
         $volunteer->load('organizers');
 
         return response()->json([
@@ -38,13 +38,19 @@ class FollowingController extends Controller
     }
 
     public function store(Request $request){
-        $validated = $request->validate([
-            'volunteer_id' => 'required|exists:volunteers,volunteer_id',
+        $validated = $request->validate([            
             'organizer_id' => 'required|exists:organizers,organizer_id',
             'notification' => 'required|boolean',
         ]);
 
-        $volunteer = Volunteer::findOrFail($validated['volunteer_id']);
+        $volunteer = auth('api')->user();
+
+        if(!$volunteer instanceof \App\Models\Volunteer){
+            return response()->json([
+                'message' => 'Hanya volunteer yang bisa melakukan follow'
+            ],403);
+        }
+
         $organizer = Organizer::findOrFail($validated['organizer_id']);
 
         $volunteer->organizers()->syncWithoutDetaching([
@@ -61,15 +67,28 @@ class FollowingController extends Controller
     }
 
     public function update(Request $request, Organizer $organizer){
-        $validated = $request->validate([
-            'volunteer_id' => 'required|exists:volunteers,volunteer_id',
+        $validated = $request->validate([            
             'notification' => 'required|boolean',
         ]); 
 
+        $volunteer = auth('api')->user();
+        if(!$volunteer instanceof \App\Models\Volunteer){
+            return response()->json([
+                'message' => 'Hanya volunteer yang bisa melakukan mengubah setelan notifikasi'
+            ],403);
+        }
+
         $volunteer = Volunteer::findOrFail($validated['volunteer_id']);
-        $volunteer->organizers()->updateExistingPivot($organizer->organizer_id, [
-            'notification' => $validated['notification']
-        ]);
+        $updated = $volunteer->organizers()
+            ->updateExistingPivot($organizer->organizer_id, [
+                'notification' => $validated['notification']
+            ]);
+        
+        if($updated === 0) {
+            return response()->json([
+                'message' => 'Anda belum follow organizer ini'
+            ],403);
+        }
 
         $pivot = $volunteer->organizers()
                 ->find($organizer->organizer_id)?->pivot;              
@@ -80,13 +99,21 @@ class FollowingController extends Controller
         ]);
     }
 
-    public function destroy(Request $request, Organizer $organizer){
-        $validated = $request->validate([
-            'volunteer_id' => 'required|exists:volunteers,volunteer_id',
-        ]);
+    public function destroy(Organizer $organizer){
+        $volunteer = auth('api')->user();
+        if(!$volunteer instanceof \App\Models\Volunteer){
+            return response()->json([
+                'message' => 'Hanya volunteer yang bisa melakukan mengubah setelan notifikasi'
+            ],403);
+        }
 
-        $volunteer = Volunteer::findOrFail($validated['volunteer_id']);
-        $volunteer->organizers()->detach($organizer->organizer_id);
+        $deleted = $volunteer->organizers()->detach($organizer->organizer_id);
+
+        if($deleted === 0){
+            return response()->json([
+                'message' => 'Gagal unfollow: Anda belum follow organizer ini'
+            ],403);
+        }
         
         return response()->json([
             'message' => 'Berhasil Unfollow Organizer'
