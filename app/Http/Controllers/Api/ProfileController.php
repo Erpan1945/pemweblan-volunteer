@@ -32,7 +32,7 @@ class ProfileController extends Controller
         }
 
         // Fallback jika tipe user tidak dikenali (seharusnya tidak terjadi)
-        return response()->json($user);
+        return response()->json(['message' => 'Tipe pengguna tidak dikenali.'], 500);
     }
 
     // PUT /api/profile
