@@ -19,16 +19,7 @@ class ActivityList extends Model
         return $this->belongsTo(Volunteer::class, 'volunteer_id');
     }
 
-    public function details() { 
-        return $this->hasMany(ListDetail::class); 
-    }
-
     public function activities() { 
-        return $this->belongsToMany(Activity::class, 'list_details', 'list_id', 'activity_id'); 
-    }
-
-    public function listDetails()
-    {
-        return $this->hasMany(ListDetail::class, 'list_id');
+        return $this->belongsToMany(Activity::class, 'activity_activity_list', 'list_id', 'activity_id'); 
     }
 }

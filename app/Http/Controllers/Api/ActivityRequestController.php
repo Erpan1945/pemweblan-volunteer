@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityRequest;
 use Illuminate\Http\Request;
+use App\Http\Resources\ActivityRequestResource;
 
 class ActivityRequestController extends Controller
 {
@@ -25,9 +26,19 @@ class ActivityRequestController extends Controller
     }
 
     // GET /api/activity_request (semua request)
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(ActivityRequest::all(), 200);
+        $user = $request->user();
+
+        // Jika pengguna yang login BUKAN instance dari model Admin...
+        // if (!($user instanceof \App\Models\Admin)) {
+        //     // ...tolak aksesnya dengan error 403 Forbidden.
+        //     return response()->json(['message' => 'Akses ditolak. Hanya Admin yang diizinkan.'], 403);
+        // }
+        // Kode ini hanya akan berjalan jika pengguna adalah Admin.
+        $activityRequests = ActivityRequest::with('organizer')->get();
+
+        return ActivityRequestResource::collection($activityRequests);
     }
 
     // GET /api/activity_request/mine (dummy: anggap organizer_id = 1)
