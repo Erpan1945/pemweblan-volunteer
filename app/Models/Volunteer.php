@@ -34,7 +34,7 @@ class Volunteer extends Authenticatable implements JWTSubject
     }
 
     public function activityLists() { 
-        return $this->hasMany(ActivityList::class); 
+        return $this->hasMany(ActivityList::class, 'volunteer_id', 'volunteer_id'); 
     }
 
     public function organizers(){
