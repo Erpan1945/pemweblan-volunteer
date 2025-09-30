@@ -72,9 +72,20 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
         Route::put('/activities/{activity}/activity_lists', [ActivityListController::class, 'update']);
         Route::put('/activity_lists/{activity_list}/name', [ActivityListController::class, 'rename']);
     });
+    
+    // Rute untuk pendaftaran kegiatan
+    Route::get('/enrollments', [EnrollmentController::class, 'index']); // GET semua pendaftaran
+    Route::get('/enrollments/{id}', [EnrollmentController::class, 'show']); // GET detail
+    Route::post('/enrollments', [EnrollmentController::class, 'store']); // POST daftar kegiatan
+    Route::put('/enrollments/{id}', [EnrollmentController::class, 'update']); // PUT update
+    Route::patch('/enrollments/{id}', [EnrollmentController::class, 'update']); // PATCH update partial
+    Route::delete('/enrollments/{id}', [EnrollmentController::class, 'destroy']); // DELETE pendaftaran
+    Route::patch('/enrollments/{id}/status', [EnrollmentController::class, 'updateStatus']); 
+    Route::get('/user/{volunteer}/enrollments', [EnrollmentController::class, 'getByUser']); 
+    Route::get('/activity/{activity}/enrollments', [EnrollmentController::class, 'getByActivity']); 
+});
 
-    // Rute untuk Permohonan Kegiatan (Activity Request)
-    Route::prefix('activity_request')->group(function () {
+Route::prefix('activity_request')->group(function () {
     Route::post('/', [ActivityRequestController::class, 'store']);
     Route::get('/', [ActivityRequestController::class, 'index']);
     Route::get('/mine', [ActivityRequestController::class, 'mine']);
