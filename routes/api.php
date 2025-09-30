@@ -120,7 +120,7 @@ Route::prefix('activities')->controller(ActivityController::class)->group(functi
 
 //Rute CRUD Review
 Route::get('/review', [ReviewController::class, 'index']);
-Route::post('/review', [ReviewController::class, 'store']); //buat review
+Route::middleware('auth:volunteer')->post('/review', [ReviewController::class, 'store']); //buat review
 Route::delete('/review/{id}', [ReviewController::class, 'destroy']);
 Route::get('/review/{id}', [ReviewController::class, 'filterOne']); //tampil satu2
 Route::put('/review/{id}', [ReviewController::class, 'update']);

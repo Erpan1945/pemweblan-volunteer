@@ -48,13 +48,12 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $request->user();
+        $user = auth('volunteer')->user();
 
-        if (!($user instanceof \App\Models\Organizer)) {
-            return response()->json(['message' => 'Hanya volunteer yang bisa membuat review.']);
-        }
+    if (!$user) {
+        return response()->json(['message' => 'Unauthorized'], 401);
+    }
 
-        if (!(user instanceof \App\Models\Volunteer)) {   
         $validated = $request->validate([
             'activity_id' => 'required|exists:activities,activity_id',
             'rating'      => 'required|integer|min:1|max:5',
@@ -72,7 +71,7 @@ class ReviewController extends Controller
             'message' => 'Review berhasil dibuat!',
             'review'  => $review
         ], 201);
-    }
+    
     }
 //tampil review by review_id
     public function filterOne($id)
