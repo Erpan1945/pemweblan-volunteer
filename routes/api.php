@@ -110,21 +110,22 @@ Route::prefix('activity_request')->group(function () {
     });    
 
 
-//Rute CRUD Review
-Route::get('/review', [ReviewController::class, 'index']);
-Route::post('/review', [ReviewController::class, 'store']); //buat review
-Route::delete('/review/{id}', [ReviewController::class, 'destroy']);
-Route::get('/review/{id}', [ReviewController::class, 'filterOne']); //tampil satu2
-Route::put('/review/{id}', [ReviewController::class, 'update']);
-Route::get('/review/{activity_id}', [ReviewController::class, 'filterActivity']); //tampil dari aktivitas
+    //Rute CRUD Review
+    Route::get('/review', [ReviewController::class, 'index']);
+    Route::post('/review', [ReviewController::class, 'store']); //buat review
+    Route::delete('/review/{id}', [ReviewController::class, 'destroy']);
+    Route::get('/review/{id}', [ReviewController::class, 'filterOne']); //tampil satu2
+    Route::put('/review/{id}', [ReviewController::class, 'update']);
+    Route::get('/review/{activity_id}', [ReviewController::class, 'filterActivity']); //tampil dari aktivitas
 
-// Rute CRUD standar yang dibuat otomatis
-Route::apiResource('activities', ActivityController::class);
-Route::apiResource('organizers', OrganizerController::class)->only(['index', 'show']); // Hanya index & show yang publik
-Route::apiResource('volunteers', VolunteerController::class)->only(['index', 'show']); // Hanya index & show yang publik
+    // Rute CRUD standar yang dibuat otomatis
+    Route::apiResource('activities', ActivityController::class);
+    Route::apiResource('organizers', OrganizerController::class)->only(['index', 'show']); // Hanya index & show yang publik
+    Route::apiResource('volunteers', VolunteerController::class)->only(['index', 'show']); // Hanya index & show yang publik
 
-Route::get('/user', [UserController::class, 'show']);
+    Route::get('/user', [UserController::class, 'show']);
 
-// Rute untuk mendapatkan informasi user berdasarkan ID (contoh)
-Route::get('/user/{id}', [UserController::class, 'show']);
+    // Rute untuk mendapatkan informasi user berdasarkan ID (contoh)
+    Route::get('/user/{id}', [UserController::class, 'show']);
 
+});
