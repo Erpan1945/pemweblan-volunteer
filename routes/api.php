@@ -109,7 +109,7 @@ Route::prefix('activity_request')->group(function () {
         Route::apiResource('organizers', OrganizerController::class)->except(['index', 'show']);
         Route::apiResource('volunteers', VolunteerController::class);
     });    
-});
+
 
 Route::prefix('activities')->controller(ActivityController::class)->group(function () {
     Route::get('/mine', 'mine')->name('activities.mine');

@@ -48,7 +48,7 @@ class ReviewController extends Controller
         $user = $request->user();
 
         if (!($user instanceof \App\Models\Volunteer)) {
-            return response()->json(['message' => 'Only volunteers can create reviews'], 403);
+            return response()->json(['message' => 'Hanya volunteer yang bisa membuat review.']);
         }
 
         $validated = $request->validate([
