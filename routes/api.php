@@ -113,7 +113,7 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
 
 });
 
-<<<<<<< HEAD
+
 //Rute CRUD Review
 
 Route::middleware(['auth:volunteer'])->group(function () {
@@ -149,8 +149,8 @@ Route::get('/user', [UserController::class, 'show']);
 // Rute untuk mendapatkan informasi user berdasarkan ID (contoh)
 Route::get('/user/{id}', [UserController::class, 'show']);
 
-=======
+
 //Publikasi Kegiatan (publik)
 Route::get('activities', [ActivityController::class, 'index']);
 Route::get('activities/{activity}', [ActivityController::class, 'show']);
->>>>>>> e6178b2fb25b9748dbc83f44ec0ddacd714e49f7
+
