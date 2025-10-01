@@ -119,12 +119,28 @@ Route::prefix('activities')->controller(ActivityController::class)->group(functi
 });
 
 //Rute CRUD Review
-Route::get('/review', [ReviewController::class, 'index']);
-Route::middleware('auth:volunteer')->post('/review', [ReviewController::class, 'store']); //buat review
-Route::delete('/review/{id}', [ReviewController::class, 'destroy']);
-Route::get('/review/{id}', [ReviewController::class, 'filterOne']); //tampil satu2
-Route::put('/review/{id}', [ReviewController::class, 'update']);
-Route::get('/review/{activity_id}', [ReviewController::class, 'filterActivity']); //tampil dari aktivitas
+
+Route::middleware(['auth:volunteer'])->group(function () {
+    Route::post('/reviews', [ReviewController::class, 'store']);
+    Route::put('/reviews/{id}', [ReviewController::class, 'update']);
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+});
+
+Route::middleware(['auth:organizer'])->group(function () {
+    Route::get('/reviews', [ReviewController::class, 'index']);
+    Route::get('/reviews/{id}', [ReviewController::class, 'filterOne']);
+    Route::get('/reviews/activity/{activity_id}', [ReviewController::class, 'filterActivity']);
+});
+
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('/reviews', [ReviewController::class, 'index']);
+    Route::get('/reviews/{id}', [ReviewController::class, 'filterOne']);
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+});
+
+Route::get('/reviews/activity/{activity_id}', [ReviewController::class, 'filterActivity']);
+Route::get('/reviews/{id}', [ReviewController::class, 'filterOne']);
+
 
 // Rute CRUD standar yang dibuat otomatis
 Route::apiResource('activities', ActivityController::class);
