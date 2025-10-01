@@ -9,6 +9,12 @@ class ActivityFactory extends Factory
 {
     public function definition(): array
     {
+        $status = $this->faker->randomElement([
+            'rejected',                
+            'pending', 
+            'published'          
+        ]);
+
         return [
             'organizer_id' => Organizer::factory(),
             'title' => $this->faker->sentence(3),
@@ -19,12 +25,7 @@ class ActivityFactory extends Factory
             'activity_end_date' => $this->faker->dateTimeBetween('+6 weeks', '+7 weeks'),
             'location' => $this->faker->city(),
             'thumbnail' => $this->faker->imageUrl(),
-            // --- INI BAGIAN YANG DIPERBAIKI TOTAL ---
-            'status' => $this->faker->randomElement([
-                'menunggu verifikasi admin', // Sesuai dengan controller
-                'dipublikasikan',          // Sesuai dengan controller
-                'ditolak'                  // Sesuai dengan controller
-            ]),
+            'rejection_reason' => $status === 'rejected' ? $this->faker->sentence(5) : null,
         ];
     }
 }

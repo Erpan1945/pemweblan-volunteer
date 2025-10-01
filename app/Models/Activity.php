@@ -26,9 +26,4 @@ class Activity extends Model
     public function activity_lists(){
         return $this->belongsToMany(ActivityList::class, 'activity_activity_list', 'activity_id', 'list_id');
     }
-
-    public function reviews()
-    {
-        return $this->hasMany(Review::class, 'activity_id');
-    }
 }

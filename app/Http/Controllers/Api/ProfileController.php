@@ -65,7 +65,7 @@ class ProfileController extends Controller
         $rules = array_merge([
             'name' => 'required|string|max:255',
             // Aturan 'unique' sekarang dinamis berdasarkan tipe user
-            'email' => 'required|email|max:255|unique:' . $tableName . ',email,' . $user->getKey(),
+            'email' => 'required|email|max:255|unique:' . $tableName . ',email,' . $user->getKey(). ',' . $primaryKeyName 
         ], $specificRules);
         
         // 3. Lakukan validasi

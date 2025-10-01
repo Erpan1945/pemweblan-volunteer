@@ -54,6 +54,10 @@ class ReviewController extends Controller
         return response()->json(['message' => 'Unauthorized'], 401);
     }
 
+<<<<<<< HEAD
+=======
+        if (!($user instanceof \App\Models\Volunteer)) {   
+>>>>>>> e6178b2fb25b9748dbc83f44ec0ddacd714e49f7
         $validated = $request->validate([
             'activity_id' => 'required|exists:activities,activity_id',
             'rating'      => 'required|integer|min:1|max:5',
