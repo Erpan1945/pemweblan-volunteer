@@ -113,6 +113,44 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
 
 });
 
+
+//Rute CRUD Review
+
+Route::middleware(['auth:volunteer'])->group(function () {
+    Route::post('/reviews', [ReviewController::class, 'store']);
+    Route::put('/reviews/{id}', [ReviewController::class, 'update']);
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+});
+
+Route::middleware(['auth:organizer'])->group(function () {
+    Route::get('/reviews', [ReviewController::class, 'index']);
+    Route::get('/reviews/{id}', [ReviewController::class, 'filterOne']);
+    Route::get('/reviews/activity/{activity_id}', [ReviewController::class, 'filterActivity']);
+});
+
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('/reviews', [ReviewController::class, 'index']);
+    Route::get('/reviews/{id}', [ReviewController::class, 'filterOne']);
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+});
+
+Route::get('/reviews/activity/{activity_id}', [ReviewController::class, 'filterActivity']);
+Route::get('/reviews/{id}', [ReviewController::class, 'filterOne']);
+
+
+// Rute CRUD standar yang dibuat otomatis
+Route::apiResource('activities', ActivityController::class);
+Route::apiResource('organizers', OrganizerController::class)->only(['index', 'show']); // Hanya index & show yang publik
+Route::apiResource('volunteers', VolunteerController::class)->only(['index', 'show']); // Hanya index & show yang publik
+
+Route::get('/user', [UserController::class, 'show']);
+
+
+// Rute untuk mendapatkan informasi user berdasarkan ID (contoh)
+Route::get('/user/{id}', [UserController::class, 'show']);
+
+
 //Publikasi Kegiatan (publik)
 Route::get('activities', [ActivityController::class, 'index']);
 Route::get('activities/{activity}', [ActivityController::class, 'show']);
+
