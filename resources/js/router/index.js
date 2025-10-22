@@ -9,7 +9,7 @@ import ProfilePage from '../views/Profile.vue';
 const routes = [
   {
     path: '/',
-    redirect: '/login' // Arahkan halaman root ke halaman login secara default
+    redirect: '/login'
   },
   {
     path: '/login',
@@ -25,15 +25,12 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: DashboardPage
-    // Nanti bisa ditambahkan proteksi rute di sini
   },
   {
     path: '/profile',
     name: 'Profile',
     component: ProfilePage
-    // Nanti bisa ditambahkan proteksi rute di sini
   },
-  // Rute fallback jika URL tidak ditemukan (opsional)
   {
     path: '/:catchAll(.*)',
     redirect: '/login'
@@ -41,9 +38,8 @@ const routes = [
 ];
 
 const router = createRouter({
-  // Gunakan createWebHistory untuk URL bersih tanpa '#'
   history: createWebHistory(),
-  routes // shorthand for `routes: routes`
+  routes
 });
 
 export default router;
