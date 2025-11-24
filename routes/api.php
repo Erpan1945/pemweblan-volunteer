@@ -51,15 +51,21 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
     });
     
     // Rute untuk pendaftaran kegiatan
-    Route::get('/enrollments', [EnrollmentController::class, 'index']); // GET semua pendaftaran
-    Route::get('/enrollments/{id}', [EnrollmentController::class, 'show']); // GET detail
-    Route::post('/enrollments', [EnrollmentController::class, 'store']); // POST daftar kegiatan
-    Route::put('/enrollments/{id}', [EnrollmentController::class, 'update']); // PUT update
-    Route::patch('/enrollments/{id}', [EnrollmentController::class, 'update']); // PATCH update partial
-    Route::delete('/enrollments/{id}', [EnrollmentController::class, 'destroy']); // DELETE pendaftaran
-    Route::patch('/enrollments/{id}/status', [EnrollmentController::class, 'updateStatus']); 
-    Route::get('/user/{volunteer}/enrollments', [EnrollmentController::class, 'getByUser']); 
-    Route::get('/activity/{activity}/enrollments', [EnrollmentController::class, 'getByActivity']); 
+    Route::middleware('auth:volunteer')->group(function () {
+        Route::get('/enrollments', [EnrollmentController::class, 'index']);
+        Route::get('/enrollments/{enrollment}', [EnrollmentController::class, 'show']);
+        Route::post('/enrollments', [EnrollmentController::class, 'store']);
+        // Route::get('/enrollments/user/{volunteer}', [EnrollmentController::class, 'getByUser']);
+        // Route::get('/enrollments/activity/{activity}', [EnrollmentController::class, 'getByActivity']);
+    });
+
+    Route::middleware('auth:volunteer,organizer,admin')->group(function () {
+        Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy']);
+    });
+
+    Route::middleware('auth:organizer')->group(function () {
+        Route::patch('/enrollments/{enrollment}/status', [EnrollmentController::class, 'updateStatus']);
+    });
     
     // Rute untuk publikasi kegiatan
     Route::post('activities', [ActivityController::class, 'store']);
