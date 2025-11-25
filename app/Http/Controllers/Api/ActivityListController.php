@@ -25,8 +25,7 @@ class ActivityListController extends Controller
     }
 
     public function index(Volunteer $volunteer){
-        
-        $lists = $volunteer->activityLists;
+        $lists = $volunteer->activityLists()->with('activities')->get();
 
         return response()->json([
             'message' => 'Tampilan Daftar milik Volunteer',
