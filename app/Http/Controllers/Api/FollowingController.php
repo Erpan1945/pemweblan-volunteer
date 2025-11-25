@@ -12,8 +12,8 @@ class FollowingController extends Controller
     //
 
     public function index(){
-        
-        $followings = DB::table('following')->get();        
+        $volunteer = auth('volunteer')->user();
+        $followings = $volunteer->organizers()->withPivot('notification')->get();      
         return response()->json([
             'message' => 'daftar following',
             'data' => $followings
