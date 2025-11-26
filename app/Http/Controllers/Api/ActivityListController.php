@@ -10,13 +10,26 @@ use Illuminate\Http\Request;
 
 class ActivityListController extends Controller
 {
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $validated = $request->validate([
-            'volunteer_id' => 'required|exists:volunteers,volunteer_id',
             'name' => 'required|string|max:255',
         ]);
 
-        $list = ActivityList::create($validated);
+        // ambil volunteer yang login
+        $volunteer = auth('volunteer')->user();
+
+        if (!$volunteer) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        // buat list
+        $list = ActivityList::create([
+            'volunteer_id' => $volunteer->volunteer_id,
+            'name' => $validated['name']
+        ]);
 
         return response()->json([
             'message' => "Daftar Aktivitas berhasil dibuat",
@@ -24,7 +37,17 @@ class ActivityListController extends Controller
         ], 201);
     }
 
-    public function index(Volunteer $volunteer){
+    public function index()
+    {
+        /** @var \App\Models\Volunteer $volunteer */
+        $volunteer = auth('volunteer')->user();
+        
+        if (!$volunteer) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
         $lists = $volunteer->activityLists()->with('activities')->get();
 
         return response()->json([
@@ -32,6 +55,7 @@ class ActivityListController extends Controller
             'data' => $lists
         ], 200);
     }
+
 
     public function save(Request $request, Activity $activity){
         $validated = $request->validate([

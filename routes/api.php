@@ -47,7 +47,7 @@ Route::middleware('auth:organizer,volunteer,admin')->group(function () {
         Route::delete('/activity_lists/{activity_list}', [ActivityListController::class, 'destroy']);
         Route::delete('/activity_lists/{activity_list}/activities/{activity}', [ActivityListController::class, 'remove']);
         Route::put('/activities/{activity}/activity_lists', [ActivityListController::class, 'update']);
-        Route::put('/activity_lists/{activity_list}/name', [ActivityListController::class, 'rename']);
+        Route::patch('/activity_lists/{activity_list}/name', [ActivityListController::class, 'rename']);
     });
     
     // Rute untuk pendaftaran kegiatan
