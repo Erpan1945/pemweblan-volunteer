@@ -13,11 +13,23 @@ class FollowingController extends Controller
 
     public function index(){
         $volunteer = auth('volunteer')->user();
-        $followings = $volunteer->organizers()->withPivot('notification')->get();      
-        return response()->json([
-            'message' => 'daftar following',
-            'data' => $followings
-        ]);
+        $organizer = auth('organizer')->user();
+
+        if($volunteer){
+            $followings = $volunteer->organizers()->withPivot('notification')->get();      
+            return response()->json([
+                'message' => 'daftar following',
+                'data' => $followings
+            ]);
+        }
+
+        if($organizer){
+            $followers = $organizer->volunteers()->get();
+            return response()->json([
+                'message' => 'daftar follower',
+                'data' =>$followers
+            ]);
+        }
     }
 
     public function showFollower(Organizer $organizer){
