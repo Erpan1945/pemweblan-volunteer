@@ -73,6 +73,7 @@ class ActivityController extends Controller
      */
     public function show(Activity $activity)
     {
+        $activity->load('organizer');
         return response()->json([
             'message' => 'Detail kegiatan berhasil ditampilkan',
             'data' => $activity
